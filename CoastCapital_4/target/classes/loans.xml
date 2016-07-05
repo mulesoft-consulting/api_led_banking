@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd">
+    <http:listener-config name="HTTP_Listener_Loans" host="0.0.0.0" port="${http.port.loans}" doc:name="HTTP Listener Configuration"/>
+    <spring:beans>
+        <spring:bean id="CreditCardBean" name="CreditCardBean" class="com.coast.loans.CreditCard" parent="CustomerLoans_2Bean"/>
+        <spring:bean id="CreditLineBean" name="CreditLineBean" class="com.coast.loans.CreditLine" parent="CustomerLoans_2Bean"/>
+        <spring:bean id="MortgageBean" name="MortgageBean" class="com.coast.loans.Mortgage" parent="CustomerLoans_2Bean"/>
+        <spring:bean id="CustomerLoans_2Bean" name="CustomerLoans_2Bean" class="com.coast.loans.CustomerLoans" scope="prototype"/>
+    </spring:beans>
+    <flow name="loansFlow">
+        <http:listener config-ref="HTTP_Listener_Loans" path="/loans/single" doc:name="HTTP"/>
+        <set-variable variableName="_cust_id" value="#[message.inboundProperties.'http.query.params'.cust_id]" doc:name="Variable"/>
+        <logger level="INFO" doc:name="Logger" message="Loans CustID: #[flowVars._cust_id]"/>
+        <parse-template location="${loans.data.in}" doc:name="Parse Template"/>
+        <dw:transform-message metadata:id="f3651e38-dca7-49ab-9aea-ae2c565482ee" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://Customer360/XSD/CustomerLoans.xsd
+%type customerloans = :object {class: "com.coast.loans.CustomerLoans"}
+%type creditcard = :object {class: "com.coast.loans.CreditCard"}
+%type creditline = :object {class: "com.coast.loans.CreditLine"}
+%type mortgage = :object {class: "com.coast.loans.Mortgage"}
+---
+
+payload.ns0#CustomerLoansList.*ns0#CustomerLoans map ((customerLoan , indexOfCustomerLoan) -> 
+{
+	custId: customerLoan.ns0#cust_id,
+	creditCards: customerLoan.ns0#CreditCards.*ns0#CreditCard  map ((creditCard , indexOfCreditCard) -> 
+		{
+		custId: creditCard.ns0#cust_id,
+		ccType: creditCard.ns0#cc_type,
+		ccNumber: creditCard.ns0#cc_number,
+		ccInterestRate: creditCard.ns0#cc_interest_rate
+	} as :creditcard ),
+	creditLines: customerLoan.ns0#CreditLines.*ns0#CreditLine map ((creditLine , indexOfCreditLine) -> 
+		{
+		custId: creditLine.ns0#cust_id,
+		clAcctNum: creditLine.ns0#cl_acct_number,
+		clLimit: creditLine.ns0#cl_limit,
+		clInterestRate: creditLine.ns0#cl_interest_rate,
+		clBalance: creditLine.ns0#cl_balance
+	} as :creditline),
+	
+	mortgages: customerLoan.ns0#Mortgages.*ns0#Mortgage map ((mortgage , indexOfMortgage) -> 
+		{
+		custId: mortgage.ns0#cust_id,
+		mortgageAcctNum: mortgage.ns0#mortgage_acct_num,
+		mortgageValue: mortgage.ns0#mortgage_value,
+		mortgagePaid: mortgage.ns0#mortgage_paid,
+		mortgagteType: mortgage.ns0#mortgage_type,
+		mortgageEndYear: mortgage.ns0#mortgage_end_year,
+		mortgageInterestRate: mortgage.ns0#mortgage_interest_rate
+	} as :mortgage) 
+} as :customerloans) 
+
+
+
+]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="CreditCard: #[payload.get(0).custId]" level="INFO" doc:name="Logger"/>
+        <custom-transformer class="com.coast.Custom_Loans_Transformer" doc:name="CustomerListFilter"/>
+        <dw:transform-message metadata:id="24d081a6-057a-4173-8ff4-695cf6ed59c7" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	LoansList: [{
+		Loans: {
+			(CreditCards: payload.creditCards map ((creditCard , indexOfCreditCard) -> {
+				CCType: creditCard.ccType,
+				CCNumber: creditCard.ccNumber,
+				CCBalance: creditCard.ccBalance,
+				CCInterestRate: creditCard.ccInterestRate
+			})) when payload.creditCards !=null,
+			(CreditLines: payload.creditLines map ((creditLine , indexOfCreditLine) -> {
+				CLAcctNumber: creditLine.ccAcctNum,
+				CLLimit: creditLine.clLimit,
+				CLInterestRate: creditLine.clInterestRate,
+				CLBalance: creditLine.clBalance
+			})) when payload.creditLines != null,
+			(Mortgages: payload.mortgages map ((mortgage , indexOfMortgage) -> {
+				MortgageAcctNumber: mortgage.mortgageAcctNum,
+				MortgageValue: mortgage.mortgageValue,
+				MortgagePaid: mortgage.mortgage.Paid,
+				MortgageType: mortgage.mortgageType,
+				MortgageEndPeriod: mortgage.mortgageEndYear,
+				MortgageInterestRate: mortgage.mortgageInterestRate
+			})) when payload.mortgages !=null
+		}
+	}]
+}]]></dw:set-payload>
+        </dw:transform-message>
+        
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Customer Loans for #[flowVars._cust_id] are:  #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="loansFlowAll">
+        <http:listener config-ref="HTTP_Listener_Loans" path="/loans/all" doc:name="HTTP"/>
+        <logger level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

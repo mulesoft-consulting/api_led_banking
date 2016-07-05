@@ -1,0 +1,35 @@
+{
+  
+  "LoansList":[
+ 	 {"Loans":{
+       "CreditCards":[
+          {
+            "CCType": "VISA",
+            "CCNumber":"1234567-xx",
+            "CCBalance":15000.00,
+            "CCInterestRate":19.0
+        },
+        {
+          "CCType": "MC",
+          "CCNumber":"1234567-yy",
+          "CCBalance":20000.00,
+          "CCInterestRate":25.0
+        }],
+        "CreditLines":[
+          {
+            "CLAcctNumber":"3457-99-zz",
+            "CLLimit": 30000.00,
+            "CLInterestRate":15.0,
+            "CLBalance":30000.00
+        }],
+        "Mortgages":[
+          {
+            "MortgageAcctNumber": "bb-1000",
+            "MortgageValue": 500000.00,
+            "MortgagePaid": 250000.00,
+            "MortgageType":"Fixed",
+            "MortgageEndPeriod": 2020,
+            "MortgageInterestRate":9.5          
+        }]       
+     }}]
+}

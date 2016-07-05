@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "customer_loans_list_2"
+        }
+    },
+    "outputMessageMetadata": {},
+    "id": "86922078-1c57-44c5-82e6-41a31c554960",
+    "version": "5.2.0.0"
+}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://Customer360/XSD/CustomerDemographics.xsd"
+	 xmlns:tns="http://Customer360/XSD/CustomerDemographics.xsd" 
+	 targetNamespace="http://Customer360/XSD/CustomerDemographics.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	 
+	 <xs:element name="CustomerRecord">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cust_id" minOccurs="0"/>
+				<xs:element ref="first_name" minOccurs="0"/>
+				<xs:element ref="last_name" minOccurs="0"/>
+				<xs:element ref="address" minOccurs="0"/>
+				<xs:element ref="city" minOccurs="0"/>
+				<xs:element ref="province" minOccurs="0"/>
+				<xs:element ref="country" minOccurs="0"/>
+				<xs:element ref="age" minOccurs="0"/>
+				<xs:element ref="married" minOccurs="0"/>
+				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	 <xs:element name="CustomerRecordList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CustomerRecord" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	 
+	
+	<xs:element name="cust_id" type="xs:string"/>
+	<xs:element name="first_name" type="xs:string"/>
+	<xs:element name="last_name" type="xs:string"/>
+	<xs:element name="city" type="xs:string"/>
+	<xs:element name="address" type="xs:string"/>
+	<xs:element name="province" type="xs:string"/>
+	<xs:element name="country" type="xs:string"/>
+	<xs:element name="age" type="xs:integer"/>
+	<xs:element name="married" type="xs:string"/>
+	
+	
+ 	<xs:element name="REQ">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cust_id" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RESP">
+		<xs:complexType>
+			<xs:sequence>
+					<xs:element ref="CustomerRecordList" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://Customer360/XSD/CustomerLoans.xsd"
+	 xmlns:tns="http://Customer360/XSD/CustomerLoans.xsd" 
+	 targetNamespace="http://Customer360/XSD/CustomerLoans.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	 
+	 <xs:element name="CreditCard">
+		 <xs:complexType>
+			<xs:sequence>
+	 			<xs:element ref="cust_id" minOccurs="0"/>
+	 			<xs:element ref="cc_type" minOccurs="0"/>
+	 			<xs:element ref="cc_number" minOccurs="0"/>
+	 			<xs:element ref="cc_balance" minOccurs="0"/>
+	 			<xs:element ref="cc_interest_rate" minOccurs="0"/>
+	 		</xs:sequence>
+		</xs:complexType>
+	 </xs:element>
+	 
+	 <xs:element name="CreditCards">
+	 	<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CreditCard" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	 </xs:element>
+	 
+	 <xs:element name="CreditLine">
+	 	<xs:complexType>
+			<xs:sequence>
+	 			<xs:element ref="cust_id" minOccurs="0"/>
+	 			<xs:element ref="cl_acct_number" minOccurs="0"/>
+	 			<xs:element ref="cl_limit" minOccurs="0"/>
+	 			<xs:element ref="cl_interest_rate" minOccurs="0"/>
+	 			<xs:element ref="cl_balance" minOccurs="0"/>
+	 		</xs:sequence>
+		</xs:complexType>
+	 </xs:element>
+	 <xs:element name="CreditLines">
+	 	<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CreditLine" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	 </xs:element>
+	  <xs:element name="Mortgage">
+	  	<xs:complexType>
+			<xs:sequence>
+	 			<xs:element ref="cust_id" minOccurs="0"/>
+	 			<xs:element ref="mortgage_acct_num" minOccurs="0"/>
+				<xs:element ref="mortgage_value" minOccurs="0"/>
+				<xs:element ref="mortgage_paid" minOccurs="0"/>
+				<xs:element ref="mortgage_type" minOccurs="0"/>
+				<xs:element ref="mortgage_end_year" minOccurs="0"/>
+				<xs:element ref="mortgage_interest_rate" minOccurs="0"/>
+	 		</xs:sequence>
+		</xs:complexType>
+	 </xs:element>
+	 <xs:element name="Mortgages">
+	 	<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Mortgage" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	 </xs:element>
+	 
+	
+	 <xs:element name="CustomerLoans">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cust_id" minOccurs="0"/>
+				<xs:element ref="CreditCards" minOccurs="0"/>
+				<xs:element ref="CreditLines" minOccurs="0"/>
+				<xs:element ref="Mortgages" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	 <xs:element name="CustomerLoansList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="CustomerLoans" minOccurs="0" maxOccurs="unbounded"/>
+				
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	 
+	<xs:element name="cust_id" type="xs:string"/>
+	<xs:element name="cc_type" type="xs:string"/>
+	<xs:element name="cc_number" type="xs:string"/>
+	<xs:element name="cc_interest_rate" type="xs:float"/>
+	<xs:element name="cc_balance" type="xs:float"/>
+	<xs:element name="cl_acct_number" type="xs:string"/>
+	<xs:element name="cl_limit" type="xs:float"/>
+	<xs:element name="cl_interest_rate" type="xs:float"/>
+	<xs:element name="cl_balance" type="xs:float"/>
+	<xs:element name="mortgage_acct_num" type="xs:string"/>
+	<xs:element name="mortgage_value" type="xs:float"/>
+	<xs:element name="mortgage_paid" type="xs:float"/>
+	<xs:element name="mortgage_type" type="xs:string"/>
+	<xs:element name="mortgage_end_year" type="xs:integer"/>
+	<xs:element name="mortgage_interest_rate" type="xs:float"/>
+	
+
+	
+ 	<xs:element name="REQ">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="cust_id" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="RESP">
+		<xs:complexType>
+			<xs:sequence>
+					<xs:element ref="CustomerLoansList" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>

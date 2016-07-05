@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "cist_loans_pojo"
+        }
+    },
+    "id": "c8214c8e-785e-4af3-9a09-4a093bfcfc0e",
+    "version": "5.2.0.0"
+}

@@ -1,0 +1,101 @@
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://CustomerAccounts/XSD/CustomerAccount.xsd"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	xmlns:ns0="http://CustomerAccounts/XSD/CustomerAccount.xsd" 
+	name="contactService" targetNamespace="http://CustomerAccounts/XSD/CustomerAccount.xsd">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://CustomerAccounts/XSD/CustomerAccount.xsd" elementFormDefault="unqualified"
+			targetNamespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" version="1.0">
+			
+				<xs:element name="AccountList">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:Account" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				
+				<xs:element name="Account">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:acct_cust_id" minOccurs="0"/>
+							<xs:element ref="ns0:acct_number" minOccurs="0"/>
+							<xs:element ref="ns0:acct_type" minOccurs="0"/>
+							<xs:element ref="ns0:acct_balance" minOccurs="0"/>
+							<xs:element ref="ns0:acct_interest_rate" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="acct_cust_id" type="xs:string"/>
+				<xs:element name="acct_number" type="xs:string"/>
+				<xs:element name="acct_type" type="xs:string"/>
+				<xs:element name="acct_balance" type="xs:float"/>
+				<xs:element name="acct_interest_rate" type="xs:float"/>
+				
+				<xs:element name="ACCT_REQ">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:acct_cust_id" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ACCT_RESP">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:AccountList" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="REQ_IN">
+		<wsdl:part element="tns:ACCT_REQ" name="parameters"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="RESP_OUT">
+		<wsdl:part element="tns:ACCT_RESP" name="parameters"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="CustomerAccounts">
+		<wsdl:operation name="getCustomerAccounts">
+			<wsdl:input message="tns:REQ_IN" name="ReqIn"></wsdl:input>
+			<wsdl:output message="tns:RESP_OUT" name="RespOut"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCustomerAccountsAll">
+			<wsdl:input message="tns:REQ_IN" name="ReqIn"></wsdl:input>
+			<wsdl:output message="tns:RESP_OUT" name="RespOut"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="CustomerAccountsSoapBinding" type="tns:CustomerAccounts">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getCustomerAccounts">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="ReqIn">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RespOut">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCustomerAccountsAll">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="ReqIn">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RespOut">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+
+	<wsdl:service name="CustomerAccountsService">
+		<wsdl:port binding="tns:CustomerAccountsSoapBinding"
+			name="CustomerAccountsPort">
+			<soap:address location="http://localhost:8084/CustomerAcountsService/soap" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

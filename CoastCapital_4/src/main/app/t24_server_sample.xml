@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+    <http:listener-config name="HTTP_Listener_Configuration_T24_SOAP" host="0.0.0.0" port="8088" doc:name="HTTP Listener Configuration"/>
+    <cxf:configuration name="CXF_Configuration" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
+    <flow name="t24_server_sampleFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration_T24_SOAP" path="/TCIBCommonWS/services" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Got CustProfile Request #[payload]" level="INFO" doc:name="Logger"/>
+        
+        <cxf:proxy-service payload="body" wsdlLocation="${t24.wsdl}"  doc:name="CXF" bindingId="T24WebServicesImplPortBinding" configuration-ref="CXF_Configuration" namespace="http://temenos.com/TCIBCommonWS" port="T24WebServicesImplPort" service="T24WebServicesImplService" soapVersion="1.2"/>
+       
+        <dw:transform-message metadata:id="bcba970e-5674-4316-a73c-01fa9ac67bbe" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://temenos.com/TCIBCommonWS
+---
+{
+	ns0#CustomerprofileResponse: {
+		Status: {
+			transactionId: "aaa",
+			messageId: "bbbb",
+			application: "cccc"
+		},
+		CUSTOMERType: {
+			INDUSTRY: "dddd",
+			TARGET: "eeee",
+			TITLE: "fffffff",
+			GIVENNAMES: "gggggg",
+			FAMILYNAME: "xxxxx",
+			GENDER: "yyyyy",
+			CUSTOMERTYPE: "zzzzz"
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="mapped T24 response...." level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

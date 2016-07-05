@@ -1,0 +1,16 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "account_list_id"
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "Web_Service_Consumer1",
+            "typeId": "ACCT_RESP"
+        }
+    },
+    "id": "78345043-aaac-47df-9b58-6224372b34f5",
+    "version": "5.2.0.0"
+}

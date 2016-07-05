@@ -1,0 +1,142 @@
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://Customer360/XSD/CustomerDemographics.xsd"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http"
+	xmlns:ns0="http://Customer360/XSD/CustomerDemographics.xsd" 
+	name="contactService" targetNamespace="http://Customer360/XSD/CustomerDemographics.xsd">
+	<wsdl:types>
+		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:tns="http://Customer360/XSD/CustomerDemographics.xsd" elementFormDefault="unqualified"
+			targetNamespace="http://Customer360/XSD/CustomerDemographics.xsd" version="1.0">
+			
+				<xs:element name="cust_id" type="xs:string"/>
+				<xs:element name="first_name" type="xs:string"/>
+				<xs:element name="last_name" type="xs:string"/>
+				<xs:element name="city" type="xs:string"/>
+				<xs:element name="address" type="xs:string"/>
+				<xs:element name="province" type="xs:string"/>
+				<xs:element name="country" type="xs:string"/>
+				<xs:element name="age" type="xs:integer"/>
+				<xs:element name="married" type="xs:string"/>
+				
+			<xs:element name="CustomerRecord">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:cust_id" minOccurs="0"/>
+							<xs:element ref="ns0:first_name" minOccurs="0"/>
+							<xs:element ref="ns0:last_name" minOccurs="0"/>
+							<xs:element ref="ns0:address" minOccurs="0"/>
+							<xs:element ref="ns0:city" minOccurs="0"/>
+							<xs:element ref="ns0:province" minOccurs="0"/>
+							<xs:element ref="ns0:country" minOccurs="0"/>
+							<xs:element ref="ns0:age" minOccurs="0"/>
+							<xs:element ref="ns0:married" minOccurs="0"/>
+							
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				 <xs:element name="CustomerRecordList">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:CustomerRecord" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				 
+			 	<xs:element name="REQ">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:cust_id" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="CUSTOMER">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="ns0:CustomerRecord" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RESP">
+					<xs:complexType>
+						<xs:sequence>
+								<xs:element ref="ns0:CustomerRecordList" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="REQ_IN">
+		<wsdl:part element="tns:REQ" name="parameters"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="RESP_OUT">
+		<wsdl:part element="tns:RESP" name="parameters"></wsdl:part>
+	</wsdl:message>
+
+	<wsdl:portType name="CustomerDemographics">
+		<wsdl:operation name="getCustomerDemographics">
+			<wsdl:input message="tns:REQ_IN" name="ReqIn"></wsdl:input>
+			<wsdl:output message="tns:RESP_OUT" name="RespOut"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCustomerDemographicsAll">
+			<wsdl:input message="tns:REQ_IN" name="ReqIn"></wsdl:input>
+			<wsdl:output message="tns:RESP_OUT" name="RespOut"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createCustomerDemographics">
+			<wsdl:input message="tns:CUSTOMER" name="CustIn"></wsdl:input>
+			<wsdl:output message="tns:REQ" name="CustOut"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="CustomerDemographicsSoapBinding" type="tns:CustomerDemographics">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getCustomerDemographics">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="ReqIn">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RespOut">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCustomerDemographicsAll">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="ReqIn">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RespOut">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="createCustomerDemographics">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="CustIn">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CustOut">
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+
+	<wsdl:service name="CustomerDemographicsService">
+		<wsdl:port binding="tns:CustomerDemographicsSoapBinding"
+			name="CustomerDemographicsPort">
+			<soap:address location="http://localhost:8083/CustomerDemographicsService/soap" />
+		</wsdl:port>
+	</wsdl:service>
+	<wsdl:service name="CustomerDemographicsServiceAll">
+		<wsdl:port binding="tns:CustomerDemographicsSoapBinding"
+			name="CustomerDemographicsPortAll">
+			<soap:address location="http://localhost:8083/CustomerDemographicsService/soap/all" />
+		</wsdl:port>
+	</wsdl:service>
+	<wsdl:service name="CustomerDemographicsServiceCreateCustomer">
+		<wsdl:port binding="tns:CustomerDemographicsSoapBinding"
+			name="CustomerDemographicsPortCreateCustomer">
+			<soap:address location="http://localhost:8083/CustomerDemographicsService/soap/create" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

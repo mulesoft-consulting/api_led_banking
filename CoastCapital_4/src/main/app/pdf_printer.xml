@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+    <vm:connector name="VM" validateConnections="true" doc:name="VM"/>
+    <spring:beans>
+        <spring:bean id="PDFPrintWriterBean" name="PDFPrintWriterBean" class="com.coast.PDFPrinter" scope="prototype"/>
+        <spring:bean id="PDFPrinterItextBean" name="PDFPrinterItextBean" class="com.coast.PDFPrinter_iText" scope="prototype"/>
+    </spring:beans>
+    <flow name="pdf_printerFlow">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="printer.queue" connector-ref="VM" doc:name="VM"/>
+        <logger message="printing to PDF" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="file_name" value="GetAllCustomer.pdf" doc:name="Variable"/>
+        <set-variable variableName="dest_directory" value="${pdf.file.dir}" doc:name="Variable"/>
+        <component  doc:name="Java">
+            <spring-object bean="PDFPrinterItextBean"/>
+        </component>
+    </flow>
+</mule>

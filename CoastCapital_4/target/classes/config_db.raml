@@ -1,0 +1,16 @@
+#%RAML 0.8
+baseUri: http://coastcapital-customer360.cloudhub.io
+title: ConfigAndLoadDBAPI
+version: 1.0
+
+/db/load:
+  displayName: Configure Derby DB and Create Tables API
+  description: This Resource will create an embedded derby DB and create the required tables
+  get:
+    description: Utilizes the GET HTTP Verb
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include load_db_response.json
+            

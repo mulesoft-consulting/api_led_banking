@@ -1,0 +1,854 @@
+
+<message name="CustomerprofileResponse">
+<part name="parameters" element="tns:CustomerprofileResponse"/>
+</message>
+<message name="Customerprofile_Validate">
+<part name="parameters" element="tns:Customerprofile_Validate"/>
+</message>
+<message name="Customerprofile_ValidateResponse">
+<part name="parameters" element="tns:Customerprofile_ValidateResponse"/>
+</message>
+<message name="Beneficiarydelete">
+<part name="parameters" element="tns:Beneficiarydelete"/>
+</message>
+<message name="BeneficiarydeleteResponse">
+<part name="parameters" element="tns:BeneficiarydeleteResponse"/>
+</message>
+<message name="UpcomingPaymentsList">
+<part name="parameters" element="tns:UpcomingPaymentsList"/>
+</message>
+<message name="UpcomingPaymentsListResponse">
+<part name="parameters" element="tns:UpcomingPaymentsListResponse"/>
+</message>
+<message name="DDMandates_Validate">
+<part name="parameters" element="tns:DDMandates_Validate"/>
+</message>
+<message name="DDMandates_ValidateResponse">
+<part name="parameters" element="tns:DDMandates_ValidateResponse"/>
+</message>
+<message name="Upcomingpaymentscancel">
+<part name="parameters" element="tns:Upcomingpaymentscancel"/>
+</message>
+<message name="UpcomingpaymentscancelResponse">
+<part name="parameters" element="tns:UpcomingpaymentscancelResponse"/>
+</message>
+<message name="Accountalertactive">
+<part name="parameters" element="tns:Accountalertactive"/>
+</message>
+<message name="AccountalertactiveResponse">
+<part name="parameters" element="tns:AccountalertactiveResponse"/>
+</message>
+<message name="BeneficiaryList">
+<part name="parameters" element="tns:BeneficiaryList"/>
+</message>
+<message name="BeneficiaryListResponse">
+<part name="parameters" element="tns:BeneficiaryListResponse"/>
+</message>
+<message name="StandingorderCreateAmend">
+<part name="parameters" element="tns:StandingorderCreateAmend"/>
+</message>
+<message name="StandingorderCreateAmendResponse">
+<part name="parameters" element="tns:StandingorderCreateAmendResponse"/>
+</message>
+<message name="BeneficiaryAmend">
+<part name="parameters" element="tns:BeneficiaryAmend"/>
+</message>
+<message name="BeneficiaryAmendResponse">
+<part name="parameters" element="tns:BeneficiaryAmendResponse"/>
+</message>
+<message name="Listofalertsforanaccount">
+<part name="parameters" element="tns:Listofalertsforanaccount"/>
+</message>
+<message name="ListofalertsforanaccountResponse">
+<part name="parameters" element="tns:ListofalertsforanaccountResponse"/>
+</message>
+<message name="Beneficiaryversion">
+<part name="parameters" element="tns:Beneficiaryversion"/>
+</message>
+<message name="BeneficiaryversionResponse">
+<part name="parameters" element="tns:BeneficiaryversionResponse"/>
+</message>
+<message name="RepaymentSchedulesPaid">
+<part name="parameters" element="tns:RepaymentSchedulesPaid"/>
+</message>
+<message name="RepaymentSchedulesPaidResponse">
+<part name="parameters" element="tns:RepaymentSchedulesPaidResponse"/>
+</message>
+<message name="Beneficiaryversion_Validate">
+<part name="parameters" element="tns:Beneficiaryversion_Validate"/>
+</message>
+<message name="Beneficiaryversion_ValidateResponse">
+<part name="parameters" element="tns:Beneficiaryversion_ValidateResponse"/>
+</message>
+<message name="GetRMcustomernumber">
+<part name="parameters" element="tns:GetRMcustomernumber"/>
+</message>
+<message name="GetRMcustomernumberResponse">
+<part name="parameters" element="tns:GetRMcustomernumberResponse"/>
+</message>
+<message name="Accountalertactive_Validate">
+<part name="parameters" element="tns:Accountalertactive_Validate"/>
+</message>
+<message name="Accountalertactive_ValidateResponse">
+<part name="parameters" element="tns:Accountalertactive_ValidateResponse"/>
+</message>
+<message name="Fundstransferinput_Validate">
+<part name="parameters" element="tns:Fundstransferinput_Validate"/>
+</message>
+<message name="Fundstransferinput_ValidateResponse">
+<part name="parameters" element="tns:Fundstransferinput_ValidateResponse"/>
+</message>
+<message name="BeneficiaryAmend_Validate">
+<part name="parameters" element="tns:BeneficiaryAmend_Validate"/>
+</message>
+<message name="BeneficiaryAmend_ValidateResponse">
+<part name="parameters" element="tns:BeneficiaryAmend_ValidateResponse"/>
+</message>
+<message name="Amendneworexistingmessage">
+<part name="parameters" element="tns:Amendneworexistingmessage"/>
+</message>
+<message name="AmendneworexistingmessageResponse">
+<part name="parameters" element="tns:AmendneworexistingmessageResponse"/>
+</message>
+<message name="ArrangementDetails">
+<part name="parameters" element="tns:ArrangementDetails"/>
+</message>
+<message name="ArrangementDetailsResponse">
+<part name="parameters" element="tns:ArrangementDetailsResponse"/>
+</message>
+<message name="Todaystransactions">
+<part name="parameters" element="tns:Todaystransactions"/>
+</message>
+<message name="TodaystransactionsResponse">
+<part name="parameters" element="tns:TodaystransactionsResponse"/>
+</message>
+<message name="UpdateExtUserLang_Validate">
+<part name="parameters" element="tns:UpdateExtUserLang_Validate"/>
+</message>
+<message name="UpdateExtUserLang_ValidateResponse">
+<part name="parameters" element="tns:UpdateExtUserLang_ValidateResponse"/>
+</message>
+<message name="Fundstransferinput">
+<part name="parameters" element="tns:Fundstransferinput"/>
+</message>
+<message name="FundstransferinputResponse">
+<part name="parameters" element="tns:FundstransferinputResponse"/>
+</message>
+<message name="Financialsummaryofdeposit">
+<part name="parameters" element="tns:Financialsummaryofdeposit"/>
+</message>
+<message name="FinancialsummaryofdepositResponse">
+<part name="parameters" element="tns:FinancialsummaryofdepositResponse"/>
+</message>
+<message name="UpdateExtUserLang">
+<part name="parameters" element="tns:UpdateExtUserLang"/>
+</message>
+<message name="UpdateExtUserLangResponse">
+<part name="parameters" element="tns:UpdateExtUserLangResponse"/>
+</message>
+<message name="DepositDetails">
+<part name="parameters" element="tns:DepositDetails"/>
+</message>
+<message name="DepositDetailsResponse">
+<part name="parameters" element="tns:DepositDetailsResponse"/>
+</message>
+<portType name="T24WebServicesImpl">
+<operation name="StandingorderCreateAmend_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/StandingorderCreateAmend_ValidateRequest" message="tns:StandingorderCreateAmend_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/StandingorderCreateAmend_ValidateResponse" message="tns:StandingorderCreateAmend_ValidateResponse"/>
+</operation>
+<operation name="Amendneworexistingmessage_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Amendneworexistingmessage_ValidateRequest" message="tns:Amendneworexistingmessage_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Amendneworexistingmessage_ValidateResponse" message="tns:Amendneworexistingmessage_ValidateResponse"/>
+</operation>
+<operation name="DatesList">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DatesListRequest" message="tns:DatesList"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DatesListResponse" message="tns:DatesListResponse"/>
+</operation>
+<operation name="FrequencyList">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FrequencyListRequest" message="tns:FrequencyList"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FrequencyListResponse" message="tns:FrequencyListResponse"/>
+</operation>
+<operation name="DisplayIMage">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DisplayIMageRequest" message="tns:DisplayIMage"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DisplayIMageResponse" message="tns:DisplayIMageResponse"/>
+</operation>
+<operation name="LoginDetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoginDetailsRequest" message="tns:LoginDetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoginDetailsResponse" message="tns:LoginDetailsResponse"/>
+</operation>
+<operation name="DDMandates">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DDMandatesRequest" message="tns:DDMandates"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DDMandatesResponse" message="tns:DDMandatesResponse"/>
+</operation>
+<operation name="Currencylist">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/CurrencylistRequest" message="tns:Currencylist"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/CurrencylistResponse" message="tns:CurrencylistResponse"/>
+</operation>
+<operation name="Messageslist">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/MessageslistRequest" message="tns:Messageslist"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/MessageslistResponse" message="tns:MessageslistResponse"/>
+</operation>
+<operation name="ActiveAlerts">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ActiveAlertsRequest" message="tns:ActiveAlerts"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ActiveAlertsResponse" message="tns:ActiveAlertsResponse"/>
+</operation>
+<operation name="STOlist">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/STOlistRequest" message="tns:STOlist"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/STOlistResponse" message="tns:STOlistResponse"/>
+</operation>
+<operation name="LoansDetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoansDetailsRequest" message="tns:LoansDetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoansDetailsResponse" message="tns:LoansDetailsResponse"/>
+</operation>
+<operation name="Customerlist">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/CustomerlistRequest" message="tns:Customerlist"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/CustomerlistResponse" message="tns:CustomerlistResponse"/>
+</operation>
+<operation name="Loandetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoandetailsRequest" message="tns:Loandetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoandetailsResponse" message="tns:LoandetailsResponse"/>
+</operation>
+<operation name="Beneficiaryview">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryviewRequest" message="tns:Beneficiaryview"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryviewResponse" message="tns:BeneficiaryviewResponse"/>
+</operation>
+<operation name="UtilityCompanyList">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UtilityCompanyListRequest" message="tns:UtilityCompanyList"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UtilityCompanyListResponse" message="tns:UtilityCompanyListResponse"/>
+</operation>
+<operation name="LastRecenttransactionlist">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LastRecenttransactionlistRequest" message="tns:LastRecenttransactionlist"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LastRecenttransactionlistResponse" message="tns:LastRecenttransactionlistResponse"/>
+</operation>
+<operation name="PaymentSchedule">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/PaymentScheduleRequest" message="tns:PaymentSchedule"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/PaymentScheduleResponse" message="tns:PaymentScheduleResponse"/>
+</operation>
+<operation name="LoansandDepositsSchedules">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoansandDepositsSchedulesRequest" message="tns:LoansandDepositsSchedules"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/LoansandDepositsSchedulesResponse" message="tns:LoansandDepositsSchedulesResponse"/>
+</operation>
+<operation name="Standingordercancel">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/StandingordercancelRequest" message="tns:Standingordercancel"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/StandingordercancelResponse" message="tns:StandingordercancelResponse"/>
+</operation>
+<operation name="Accountdetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/AccountdetailsRequest" message="tns:Accountdetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/AccountdetailsResponse" message="tns:AccountdetailsResponse"/>
+</operation>
+<operation name="DDMandatesforcustomer">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DDMandatesforcustomerRequest" message="tns:DDMandatesforcustomer"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DDMandatesforcustomerResponse" message="tns:DDMandatesforcustomerResponse"/>
+</operation>
+<operation name="Composereplymessage_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Composereplymessage_ValidateRequest" message="tns:Composereplymessage_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Composereplymessage_ValidateResponse" message="tns:Composereplymessage_ValidateResponse"/>
+</operation>
+<operation name="Composereplymessage">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ComposereplymessageRequest" message="tns:Composereplymessage"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ComposereplymessageResponse" message="tns:ComposereplymessageResponse"/>
+</operation>
+<operation name="DepositPaymentDetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DepositPaymentDetailsRequest" message="tns:DepositPaymentDetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DepositPaymentDetailsResponse" message="tns:DepositPaymentDetailsResponse"/>
+</operation>
+<operation name="TCIBOperations">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/TCIBOperationsRequest" message="tns:TCIBOperations"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/TCIBOperationsResponse" message="tns:TCIBOperationsResponse"/>
+</operation>
+<operation name="FundstransferView">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FundstransferViewRequest" message="tns:FundstransferView"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FundstransferViewResponse" message="tns:FundstransferViewResponse"/>
+</operation>
+<operation name="Customerprofile">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/CustomerprofileRequest" message="tns:Customerprofile"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/CustomerprofileResponse" message="tns:CustomerprofileResponse"/>
+</operation>
+<operation name="Customerprofile_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Customerprofile_ValidateRequest" message="tns:Customerprofile_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Customerprofile_ValidateResponse" message="tns:Customerprofile_ValidateResponse"/>
+</operation>
+<operation name="Beneficiarydelete">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiarydeleteRequest" message="tns:Beneficiarydelete"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiarydeleteResponse" message="tns:BeneficiarydeleteResponse"/>
+</operation>
+<operation name="UpcomingPaymentsList">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpcomingPaymentsListRequest" message="tns:UpcomingPaymentsList"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpcomingPaymentsListResponse" message="tns:UpcomingPaymentsListResponse"/>
+</operation>
+<operation name="DDMandates_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DDMandates_ValidateRequest" message="tns:DDMandates_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DDMandates_ValidateResponse" message="tns:DDMandates_ValidateResponse"/>
+</operation>
+<operation name="Upcomingpaymentscancel">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpcomingpaymentscancelRequest" message="tns:Upcomingpaymentscancel"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpcomingpaymentscancelResponse" message="tns:UpcomingpaymentscancelResponse"/>
+</operation>
+<operation name="Accountalertactive">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/AccountalertactiveRequest" message="tns:Accountalertactive"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/AccountalertactiveResponse" message="tns:AccountalertactiveResponse"/>
+</operation>
+<operation name="BeneficiaryList">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryListRequest" message="tns:BeneficiaryList"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryListResponse" message="tns:BeneficiaryListResponse"/>
+</operation>
+<operation name="StandingorderCreateAmend">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/StandingorderCreateAmendRequest" message="tns:StandingorderCreateAmend"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/StandingorderCreateAmendResponse" message="tns:StandingorderCreateAmendResponse"/>
+</operation>
+<operation name="BeneficiaryAmend">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryAmendRequest" message="tns:BeneficiaryAmend"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryAmendResponse" message="tns:BeneficiaryAmendResponse"/>
+</operation>
+<operation name="Listofalertsforanaccount">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ListofalertsforanaccountRequest" message="tns:Listofalertsforanaccount"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ListofalertsforanaccountResponse" message="tns:ListofalertsforanaccountResponse"/>
+</operation>
+<operation name="Beneficiaryversion">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryversionRequest" message="tns:Beneficiaryversion"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryversionResponse" message="tns:BeneficiaryversionResponse"/>
+</operation>
+<operation name="RepaymentSchedulesPaid">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/RepaymentSchedulesPaidRequest" message="tns:RepaymentSchedulesPaid"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/RepaymentSchedulesPaidResponse" message="tns:RepaymentSchedulesPaidResponse"/>
+</operation>
+<operation name="Beneficiaryversion_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Beneficiaryversion_ValidateRequest" message="tns:Beneficiaryversion_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Beneficiaryversion_ValidateResponse" message="tns:Beneficiaryversion_ValidateResponse"/>
+</operation>
+<operation name="GetRMcustomernumber">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/GetRMcustomernumberRequest" message="tns:GetRMcustomernumber"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/GetRMcustomernumberResponse" message="tns:GetRMcustomernumberResponse"/>
+</operation>
+<operation name="Accountalertactive_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Accountalertactive_ValidateRequest" message="tns:Accountalertactive_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Accountalertactive_ValidateResponse" message="tns:Accountalertactive_ValidateResponse"/>
+</operation>
+<operation name="Fundstransferinput_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Fundstransferinput_ValidateRequest" message="tns:Fundstransferinput_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/Fundstransferinput_ValidateResponse" message="tns:Fundstransferinput_ValidateResponse"/>
+</operation>
+<operation name="BeneficiaryAmend_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryAmend_ValidateRequest" message="tns:BeneficiaryAmend_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/BeneficiaryAmend_ValidateResponse" message="tns:BeneficiaryAmend_ValidateResponse"/>
+</operation>
+<operation name="Amendneworexistingmessage">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/AmendneworexistingmessageRequest" message="tns:Amendneworexistingmessage"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/AmendneworexistingmessageResponse" message="tns:AmendneworexistingmessageResponse"/>
+</operation>
+<operation name="ArrangementDetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ArrangementDetailsRequest" message="tns:ArrangementDetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/ArrangementDetailsResponse" message="tns:ArrangementDetailsResponse"/>
+</operation>
+<operation name="Todaystransactions">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/TodaystransactionsRequest" message="tns:Todaystransactions"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/TodaystransactionsResponse" message="tns:TodaystransactionsResponse"/>
+</operation>
+<operation name="UpdateExtUserLang_Validate">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpdateExtUserLang_ValidateRequest" message="tns:UpdateExtUserLang_Validate"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpdateExtUserLang_ValidateResponse" message="tns:UpdateExtUserLang_ValidateResponse"/>
+</operation>
+<operation name="Fundstransferinput">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FundstransferinputRequest" message="tns:Fundstransferinput"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FundstransferinputResponse" message="tns:FundstransferinputResponse"/>
+</operation>
+<operation name="Financialsummaryofdeposit">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FinancialsummaryofdepositRequest" message="tns:Financialsummaryofdeposit"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/FinancialsummaryofdepositResponse" message="tns:FinancialsummaryofdepositResponse"/>
+</operation>
+<operation name="UpdateExtUserLang">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpdateExtUserLangRequest" message="tns:UpdateExtUserLang"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/UpdateExtUserLangResponse" message="tns:UpdateExtUserLangResponse"/>
+</operation>
+<operation name="DepositDetails">
+<input wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DepositDetailsRequest" message="tns:DepositDetails"/>
+<output wsam:Action="http://temenos.com/TCIBCommonWS/T24WebServicesImpl/DepositDetailsResponse" message="tns:DepositDetailsResponse"/>
+</operation>
+</portType>
+<binding name="T24WebServicesImplPortBinding" type="tns:T24WebServicesImpl">
+<soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+<operation name="StandingorderCreateAmend_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Amendneworexistingmessage_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DatesList">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="FrequencyList">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DisplayIMage">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="LoginDetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DDMandates">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Currencylist">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Messageslist">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="ActiveAlerts">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="STOlist">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="LoansDetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Customerlist">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Loandetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Beneficiaryview">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="UtilityCompanyList">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="LastRecenttransactionlist">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="PaymentSchedule">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="LoansandDepositsSchedules">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Standingordercancel">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Accountdetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DDMandatesforcustomer">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Composereplymessage_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Composereplymessage">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DepositPaymentDetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="TCIBOperations">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="FundstransferView">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Customerprofile">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Customerprofile_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Beneficiarydelete">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="UpcomingPaymentsList">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DDMandates_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Upcomingpaymentscancel">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Accountalertactive">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="BeneficiaryList">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="StandingorderCreateAmend">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="BeneficiaryAmend">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Listofalertsforanaccount">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Beneficiaryversion">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="RepaymentSchedulesPaid">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Beneficiaryversion_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="GetRMcustomernumber">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Accountalertactive_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Fundstransferinput_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="BeneficiaryAmend_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Amendneworexistingmessage">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="ArrangementDetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Todaystransactions">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="UpdateExtUserLang_Validate">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Fundstransferinput">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="Financialsummaryofdeposit">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="UpdateExtUserLang">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+<operation name="DepositDetails">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+<output>
+<soap:body use="literal"/>
+</output>
+</operation>
+</binding>
+<service name="T24WebServicesImplService">
+<port name="T24WebServicesImplPort" binding="tns:T24WebServicesImplPortBinding">
+<soap:address location="http://184.94.24.165:9095/TCIBCommonWS/services"/>
+</port>
+</service>
+</definitions>

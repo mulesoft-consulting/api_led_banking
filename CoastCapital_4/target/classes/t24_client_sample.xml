@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+    <ws:consumer-config name="Web_Service_Consumer2" wsdlLocation="WSDL/2_attempts_xsd_bundld/services2.wsdl" service="T24WebServicesImplService" port="T24WebServicesImplPort" serviceAddress="http://localhost:8088/TCIBCommonWS/services" doc:name="Web Service Consumer"/>
+    <http:listener-config name="HTTP_Listener_Configuration_T24" host="0.0.0.0" port="8087" doc:name="HTTP Listener Configuration"/>
+    <flow name="t24_sampleFlow">
+        <http:listener config-ref="HTTP_Listener_Configuration_T24" path="/" doc:name="HTTP"/>
+        <dw:transform-message metadata:id="b6e98395-adfa-44c9-b4b1-5e86014663f6" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://temenos.com/TCIBCommonWS
+---
+{
+	ns0#Customerprofile: {
+		WebRequestCommon: {
+			company: "CoastCapital"
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Invoing T24" level="INFO" doc:name="Logger"/>
+        <ws:consumer config-ref="Web_Service_Consumer2" operation="Customerprofile" doc:name="Web Service Consumer"/>
+        <dw:transform-message metadata:id="0a455f64-583f-4e55-80b5-1bdbb16d684a" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+payload]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="response from T24 #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Mon Jun 27 21:50:47 EDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0155-94b3-9d43-00000b8e2a30 
+on database directory /Users/brunobaloi/AnypointStudio/workspace_5.4_new/CoastCapital_4/CUSTOMER with class loader org.mule.module.launcher.MuleApplicationClassLoader[CoastCapital_4]@66ec9390 
+Loaded from file:/Users/brunobaloi/AnypointStudio/workspace_5.4_new/.mule/apps/CoastCapital_4/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_40-b27
+user.dir=/Users/brunobaloi/AnypointStudio/workspace_5.4_new/CoastCapital_4
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.10.5
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

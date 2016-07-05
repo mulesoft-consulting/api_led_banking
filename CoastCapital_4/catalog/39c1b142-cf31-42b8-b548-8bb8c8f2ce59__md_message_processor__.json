@@ -1,0 +1,16 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "ccust_loans_in"
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "ccust_loans_in"
+        }
+    },
+    "id": "39c1b142-cf31-42b8-b548-8bb8c8f2ce59",
+    "version": "5.2.0.0"
+}

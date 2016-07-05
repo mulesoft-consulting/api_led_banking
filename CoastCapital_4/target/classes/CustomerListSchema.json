@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+    
+    "CustomerList": {
+        "id": "http://jsonschema.net/1/customer",
+        "type": "array",
+        "items":{
+          
+          "$ref": "CustomerSchema.json#/Customer"
+        }
+    }
+}

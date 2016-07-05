@@ -1,0 +1,22 @@
+{
+    "inputMessageMetadata": {
+        "flowVariables": {
+            "cust_loans_var": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "customer_loans_json_2"
+            },
+            "loans_var": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "customer_loans_json_2"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "customer_json"
+        }
+    },
+    "id": "daccdf69-fa0a-4a95-b535-ffaac1bc8f09",
+    "version": "5.2.0.0"
+}

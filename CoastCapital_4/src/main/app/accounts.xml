@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+    <http:listener-config name="HTTP_Listener_Accounts" host="0.0.0.0" port="${http.port.accounts}" doc:name="HTTP Listener Configuration"/>
+    <cxf:configuration name="CXF_Configuration_Accounts" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
+    <cxf:configuration name="CXF_Configuration_demographics" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
+    <spring:beans>
+        <spring:bean id="CustomerAccountBean" name="CustomerAccountBean" class="com.coast.CustomerAccount"/>
+    </spring:beans>
+    <flow name="accountsFlow">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+      
+      	<cxf:proxy-service bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPort" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsService" payload="body" doc:name="CXF" configuration-ref="CXF_Configuration_Accounts" wsdlLocation="${cust.accounts.wsdl}"/>
+      
+        <dw:transform-message metadata:id="d17a740d-1ed4-4a0e-8239-be6e6d9e20f2" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+
+payload.ns0#ACCT_REQ.ns0#acct_cust_id]]></dw:set-payload>
+            <dw:set-variable variableName="_cust_id"><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+payload.ns0#ACCT_REQ.ns0#acct_cust_id]]></dw:set-variable>
+        </dw:transform-message>
+        <logger message="AcctCustId: #[flowVars._cust_id]" level="INFO" doc:name="Logger"/>
+        <parse-template location="${accounts.data.in}" doc:name="Parse Template"/>
+         <custom-transformer class="com.coast.Custom_CSV_Account_Transformer" doc:name="CSVtoPOJO Transformer"/>
+        <dw:transform-message metadata:id="756dfe2d-2cba-4f81-a03f-c8650f6f99bb" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_RESP: {
+		ns0#AccountList: {
+			(payload map ((payload01 , indexOfPayload01) -> {
+				(ns0#Account: {
+					ns0#acct_cust_id: payload01.customerId,
+					ns0#acct_number: payload01.accountNumber,
+					ns0#acct_type: payload01.accountType,
+					ns0#acct_balance: payload01.acountBalance,
+					ns0#acct_interest_rate: payload01.accountIterestRate
+				}) when flowVars."_cust_id"==payload01.customerId
+			}))
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="AccountData: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

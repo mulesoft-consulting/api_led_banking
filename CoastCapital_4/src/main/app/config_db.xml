@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+    <http:listener-config name="config_db-httpListenerConfig" host="0.0.0.0" port="${db.config.port}" doc:name="HTTP Listener Configuration"/>
+    <apikit:config name="config_db-config" raml="config_db.raml" consoleEnabled="true" consolePath="console" doc:name="Router"/>
+    <db:derby-config name="Derby_Configuration_2" url="${jdbc.derby.url}" doc:name="Derby Configuration"/>
+    <flow name="config_db-main">
+        <http:listener config-ref="config_db-httpListenerConfig" path="/init/*" doc:name="HTTP"/>
+        <apikit:router config-ref="config_db-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="config_db-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="get:/db/load:config_db-config">
+        <db:execute-ddl config-ref="Derby_Configuration" doc:name="Database">
+            <db:dynamic-query><![CDATA[drop table customer_demographics]]></db:dynamic-query>
+        </db:execute-ddl>
+        <db:execute-ddl config-ref="Derby_Configuration" doc:name="Create Demographics Table">
+            <db:dynamic-query><![CDATA[CREATE TABLE customer_demographics (
+cust_id VARCHAR(1024), 
+first_name VARCHAR(512), 
+last_name VARCHAR(512), 
+address VARCHAR(1024),
+city VARCHAR(512),
+province VARCHAR(512),
+country VARCHAR(512), 
+age INT, 
+married VARCHAR(10))]]></db:dynamic-query>
+        </db:execute-ddl>
+        <db:insert config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[insert into customer_demographics(cust_id,first_name,last_name,address,city,province,country,age,married) values('123','John','Smith','123 Main St.','Toronto','ON','Canada',33,'YES')]]></db:parameterized-query>
+        </db:insert>
+        <db:insert config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[insert into customer_demographics(cust_id,first_name,last_name,address,city,province,country,age,married) values('125','Jane','Doe','333 Avenue Rd.','Toronto','ON','Canada',33,'YES')]]></db:parameterized-query>
+        </db:insert>
+        <logger message="Created Demographics Database !" level="INFO" doc:name="Logger"/>
+        <set-payload value="{&quot;status&quot;: &quot;success&quot;}" doc:name="Set Payload" />
+        <catch-exception-strategy doc:name="Catch Exception Strategy">
+            <logger message="Table customer_demographics does n ot exist...creating new one" level="INFO" doc:name="Logger"/>
+            <db:execute-ddl config-ref="Derby_Configuration" doc:name="Copy_of_Create Demographics Table">
+                <db:dynamic-query><![CDATA[CREATE TABLE customer_demographics (
+cust_id VARCHAR(1024), 
+first_name VARCHAR(512), 
+last_name VARCHAR(512), 
+address VARCHAR(1024),
+city VARCHAR(512),
+province VARCHAR(512),
+country VARCHAR(512), 
+age INT, 
+married VARCHAR(10))]]></db:dynamic-query>
+            </db:execute-ddl>
+            <db:insert config-ref="Derby_Configuration" doc:name="Copy_of_Database">
+                <db:parameterized-query><![CDATA[insert into customer_demographics(cust_id,first_name,last_name,address,city,province,country,age,married) values('123','John','Smith','123 Main St.','Toronto','ON','Canada',33,'YES')]]></db:parameterized-query>
+            </db:insert>
+            <db:insert config-ref="Derby_Configuration" doc:name="Copy_of_Database">
+                <db:parameterized-query><![CDATA[insert into customer_demographics(cust_id,first_name,last_name,address,city,province,country,age,married) values('125','Jane','Doe','333 Avenue Rd.','Toronto','ON','Canada',33,'YES')]]></db:parameterized-query>
+            </db:insert>
+            <logger message="Created Demographics Database !" level="INFO" doc:name="Copy_of_Logger"/>
+            <set-payload value="{&quot;status&quot;: &quot;success&quot;}" doc:name="Copy_of_Set Payload"/>
+        </catch-exception-strategy>
+    </flow>
+    <apikit:mapping-exception-strategy name="config_db-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>

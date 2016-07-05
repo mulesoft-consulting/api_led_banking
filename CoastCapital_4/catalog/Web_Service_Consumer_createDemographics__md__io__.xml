@@ -1,0 +1,15 @@
+<metadata__cache__entry>
+  <version>5.2.0.0</version>
+  <connectorName>Web_Service_Consumer_createDemographics</connectorName>
+  <metadataIo class="tree-map">
+    <entry>
+      <string>createCustomerDemographics</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry/>
+        </entry>
+      </map>
+    </entry>
+  </metadataIo>
+</metadata__cache__entry>

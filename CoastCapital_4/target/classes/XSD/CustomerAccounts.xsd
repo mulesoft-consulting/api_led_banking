@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns="http://CustomerAccounts/XSD/CustomerAccount.xsd"
+	 xmlns:tns="http://CustomerAccounts/XSD/CustomerAccount.xsd"
+	 targetNamespace="http://CustomerAccounts/XSD/CustomerAccount.xsd"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	 
+	<xs:element name="AccountList">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Account" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="Account">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="acct_cust_id" minOccurs="0"/>
+				<xs:element ref="acct_number" minOccurs="0"/>
+				<xs:element ref="acct_type" minOccurs="0"/>
+				<xs:element ref="acct_balance" minOccurs="0"/>
+				<xs:element ref="acct_interest_rate" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="acct_cust_id" type="xs:string"/>
+	<xs:element name="acct_number" type="xs:string"/>
+	<xs:element name="acct_type" type="xs:string"/>
+	<xs:element name="acct_balance" type="xs:float"/>
+	<xs:element name="acct_interest_rate" type="xs:float"/>
+	
+	
+	<xs:element name="ACCT_REQ">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="acct_cust_id" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ACCT_RESP">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="AccountList" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+</xs:schema>
