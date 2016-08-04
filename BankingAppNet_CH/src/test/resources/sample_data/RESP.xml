@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:RESP xmlns:ns0="http://Customer360/XSD/CustomerDemographics.xsd">
+  <ns0:CustomerRecordList>
+    <ns0:CustomerRecord/>
+  </ns0:CustomerRecordList>
+</ns0:RESP>

@@ -1,0 +1,22 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "sfdc_contact_json"
+        },
+        "flowVariables": {
+            "cust_loans_var": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "customer_loans_json_2"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "customer_json"
+        }
+    },
+    "id": "5a2c5794-bf61-4d02-9021-50ed03ed5832",
+    "version": "5.2.0.0"
+}

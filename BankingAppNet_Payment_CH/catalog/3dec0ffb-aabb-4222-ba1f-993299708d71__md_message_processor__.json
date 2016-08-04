@@ -1,0 +1,28 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Payment_JSON"
+        },
+        "flowVariables": {
+            "PaymentRaw2": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "Payment_JSON"
+            }
+        },
+        "sessionVariables": {
+            "PaymentRawSession": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "Payment_JSON"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Account_Fragment_JSON"
+        }
+    },
+    "id": "3dec0ffb-aabb-4222-ba1f-993299708d71",
+    "version": "5.2.0.0"
+}

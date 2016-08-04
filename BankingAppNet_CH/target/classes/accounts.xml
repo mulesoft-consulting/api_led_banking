@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:cxf="http://www.mulesoft.org/schema/mule/cxf" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/current/mule-cxf.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+    <http:listener-config name="HTTP_Listener_Accounts" host="0.0.0.0" port="${http.port.accounts}" doc:name="HTTP Listener Configuration"/>
+    <cxf:configuration name="CXF_Configuration_Accounts" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
+    <cxf:configuration name="CXF_Configuration_demographics" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
+    <spring:beans>
+        <spring:bean id="CustomerAccountBean" name="CustomerAccountBean" class="com.coast.CustomerAccount"/>
+    </spring:beans>
+    <flow name="accountsFlow_customer">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+      
+      	<cxf:proxy-service bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPort" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsService" payload="body" doc:name="CXF"  wsdlLocation="${cust.accounts.wsdl}"/>
+      
+        <dw:transform-message metadata:id="d17a740d-1ed4-4a0e-8239-be6e6d9e20f2" doc:name="Transform Message">
+            <dw:input-payload doc:sample="sample_data/ACCT_REQ_2.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+
+payload.ns0#ACCT_REQ.ns0#acct_cust_id]]></dw:set-payload>
+            <dw:set-variable variableName="_cust_id"><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+payload.ns0#ACCT_REQ.ns0#acct_cust_id]]></dw:set-variable>
+        </dw:transform-message>
+        <logger message="AcctCustId: #[flowVars._cust_id]" level="INFO" doc:name="Logger"/>
+        <db:select config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[select * from customer_accounts where cust_id = #[flowVars._cust_id]]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="2ad56362-2d34-4871-8c32-a01b5651ced8" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_RESP: {
+		ns0#AccountList: {
+			(payload map ((payload01 , indexOfPayload01) -> {
+				ns0#Account: {
+					ns0#acct_cust_id: payload01.cust_id,
+					ns0#acct_number: payload01.acct_num,
+					ns0#acct_type: payload01.acct_type,
+					ns0#acct_balance: payload01.acct_balance as :number,
+					ns0#acct_interest_rate: payload01.acct_interest_rate as :number
+				}
+			}))
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="AccountData: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="accountsFlow_singleAccount">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap/single" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <cxf:proxy-service bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPortSingle" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsServiceSingle" payload="body" wsdlLocation="${cust.accounts.wsdl}" doc:name="CXF"/>
+        <dw:transform-message metadata:id="7bf42a9a-7a41-4dad-bfef-db61d6d41499" doc:name="Transform Message">
+            <dw:input-payload doc:sample="sample_data/ACCT_NUM.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Getting single account data for : #[payload.ACCT_NUM.acct_number]" level="INFO" doc:name="Logger"/>
+        <db:select config-ref="Derby_Configuration" streaming="true" doc:name="Database">
+            <db:parameterized-query><![CDATA[select * from customer_accounts where acct_num=#[payload.ACCT_NUM.acct_number]]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="a6b5a6fd-d487-4265-9745-b0fc19837983" doc:name="Transform Message">
+            <dw:input-payload doc:sample="sample_data/list_map_2.dwl"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT: {
+		ns0#Account: {
+			ns0#acct_cust_id: payload[0].cust_id,
+			ns0#acct_number: payload[0].acct_num,
+			ns0#acct_type: payload[0].acct_type,
+			ns0#acct_balance: payload[0].acct_balance as :number,
+			ns0#acct_interest_rate: payload[0].acct_interest_rate as :number
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="db result set: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    
+     <flow name="accountsFlow_all">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap/all" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+      
+      	<cxf:proxy-service bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPortAll" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsServiceAll" payload="body" doc:name="CXF"  wsdlLocation="${cust.accounts.wsdl}"/>
+        <logger message="getting all accounts WS" level="INFO" doc:name="Logger"/>
+        <db:select config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[select * from customer_accounts]]></db:parameterized-query>
+        </db:select>
+        <dw:transform-message metadata:id="a7ef2718-560a-4794-842e-e61a0b31abde" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_RESP: {
+		ns0#AccountList: {
+			(payload map ((payload01 , indexOfPayload01) -> {
+				ns0#Account: {
+					ns0#acct_cust_id: payload01.cust_id,
+					ns0#acct_number: payload01.acct_num,
+					ns0#acct_type: payload01.acct_type,
+					ns0#acct_balance: payload01.acct_balance as :number,
+					ns0#acct_interest_rate: payload01.acct_interest_rate as :number
+				}
+			}))
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="AccountData: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+      <flow name="accountsFlow_Create">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap/create" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Create Account: #[payload]" level="INFO" doc:name="Logger"/>
+        <cxf:proxy-service  bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPortCreate" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsServiceCreate" payload="body" wsdlLocation="${cust.accounts.wsdl}" doc:name="CXF"/>
+        <dw:transform-message metadata:id="78805f36-ff1c-4cb2-8f79-a2117d061e92" doc:name="Transform Message">
+            <dw:input-payload doc:sample="sample_data/Account.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	accountIterestRate: payload.ns0#Account.ns0#acct_interest_rate,
+	accountNumber: payload.ns0#Account.ns0#acct_number,
+	accountType: payload.ns0#Account.ns0#acct_type,
+	acountBalance: payload.ns0#Account.ns0#acct_balance,
+	customerId: payload.ns0#Account.ns0#acct_cust_id
+} as :object {
+	class : "com.coast.CustomerAccount"
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <set-variable variableName="cust_id" value="#[payload.customerId]" doc:name="Variable"/>
+        <set-variable variableName="acct_num" value="#[payload.accountNumber]" doc:name="Variable"/>
+        <logger message="WS creating account : cust_id=#[flowVars.cust_id], acct_number=#[payload.accountNumber],acct_type=#[payload.accountType], balance=#[payload.acountBalance]" level="INFO" doc:name="Logger"/>
+        <db:insert config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[insert into customer_accounts(cust_id,acct_num,acct_type,acct_balance,acct_interest_rate) values(#[payload.customerId],#[payload.accountNumber],#[payload.accountType],#[payload.acountBalance],#[payload.accountIterestRate])]]></db:parameterized-query>
+        </db:insert>
+        <dw:transform-message metadata:id="82f4a1cd-1279-47d0-a8d4-c898e7b82cdd" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_OUT: {
+		ns0#acct_number: flowVars.acct_num,
+		ns0#acct_cust_id: flowVars.cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+    
+     <flow name="accountsFlow_update">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap/update" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Updating account: #[payload]" level="INFO" doc:name="Logger"/>
+        <cxf:proxy-service bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPortUpdate" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsServiceUpdate" payload="body" wsdlLocation="${cust.accounts.wsdl}" doc:name="CXF"/>
+        <!-- 
+        <cxf:proxy-service  bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPortUpdate" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsServiceUpdate" payload="body" wsdlLocation="${cust.accounts.wsdl}" doc:name="CXF"/>
+       -->
+       
+        <dw:transform-message metadata:id="266e9a6d-a54e-47d7-ba14-9d84375c1e61" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	accountIterestRate: payload.ns0#Account.ns0#acct_interest_rate,
+	accountNumber: payload.ns0#Account.ns0#acct_number,
+	accountType: payload.ns0#Account.ns0#acct_type,
+	acountBalance: payload.ns0#Account.ns0#acct_balance,
+	customerId: payload.ns0#Account.ns0#acct_cust_id
+} as :object {
+	class : "com.coast.CustomerAccount"
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <set-variable variableName="cust_id" value="#[payload.customerId]" doc:name="Variable"/>
+        <set-variable variableName="acct_num" value="#[payload.accountNumber]" doc:name="Variable"/>
+        <logger message="WS Updating account : cust_id=#[flowVars.cust_id], acct_number=#[payload.accountNumber],acct_type=#[payload.accountType], balance=#[payload.acountBalance]" level="INFO" doc:name="Logger"/>
+        <db:update config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[update customer_accounts set cust_id= #[payload.customerId], acct_num=#[payload.accountNumber],acct_type=#[payload.accountType],acct_balance=#[payload.acountBalance],acct_interest_rate=#[payload.accountIterestRate]
+
+where acct_num=#[payload.accountNumber]]]></db:parameterized-query>
+        </db:update>
+        <dw:transform-message metadata:id="4240fa8f-fa56-4196-a589-cda9248e67f1" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_OUT: {
+		ns0#acct_number: flowVars.acct_num,
+		ns0#acct_cust_id: flowVars.cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+    <flow name="accountsFlow_delete">
+        <http:listener config-ref="HTTP_Listener_Accounts" path="/CustomerAcountsService/soap/delete" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Deleting account: #[payload]" level="INFO" doc:name="Logger"/>
+        <cxf:proxy-service bindingId="CustomerAccountsSoapBinding" port="CustomerAccountsPortDelete" namespace="http://CustomerAccounts/XSD/CustomerAccount.xsd" service="CustomerAccountsServiceDelete" payload="body" wsdlLocation="${cust.accounts.wsdl}" doc:name="CXF"/>
+        <dw:transform-message metadata:id="73db7fb1-79d0-48af-95b0-7f94f121457c" doc:name="Transform Message">
+            <dw:input-payload doc:sample="sample_data/ACCT_NUM_1.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="Deleteing single account data for : #[payload.ACCT_NUM.acct_number]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="acct_num" value="#[payload.ACCT_NUM.acct_number]" doc:name="Variable"/>
+        <db:delete config-ref="Derby_Configuration" doc:name="Database">
+            <db:parameterized-query><![CDATA[delete from customer_accounts where acct_num=#[flowVars.acct_num]]]></db:parameterized-query>
+        </db:delete>
+        <dw:transform-message metadata:id="53df91a7-7412-4bdb-b3de-a6347e025c3c" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_OUT: {
+		ns0#acct_number: flowVars.acct_num
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+   
+</mule>

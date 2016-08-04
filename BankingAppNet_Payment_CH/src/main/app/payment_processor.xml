@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:twilio="http://www.mulesoft.org/schema/mule/twilio" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/current/mule-objectstore.xsd
+http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/twilio/current/mule-twilio.xsd
+http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd">
+
+	  	<twitter:config name="Twitter__Configuration_2" accessKey="2334061002-eAsrPugWmItAELi63qOk0w8PdsPDpND5WUO8lNe" accessSecret="BZbcMghzv10i0g7FKInG9VWaRr9RwVQe4DdtHJVDDMycH" consumerKey="JaC19tbjwNkp7pKm0bzZcIxZG" consumerSecret="ExmfK92XAmYV2t2lT8qUqBRsGIHIZUl9PyD7T7BuR27XLwumxL" doc:name="Twitter: Configuration"/>
+  
+	<twilio:config name="Twilio" accountSid="${twilio.app.id}" authToken="${twilio.app.token}" doc:name="Twilio">
+    	<twilio:http-callback-config></twilio:http-callback-config>
+    </twilio:config>
+
+    <http:listener-config name="HTTP_Listener_Configuration_PymentProcessor" host="0.0.0.0" port="8098" doc:name="HTTP Listener Configuration"/>
+      <anypoint-mq:config name="Anypoint_MQ_Configuration" doc:name="Anypoint MQ Configuration">
+        <anypoint-mq:provider url="https://mq-us-east-1.anypoint.mulesoft.com/api/v1" clientId="3c38280a90cf49b8b291c92310acf191" clientSecret="c3fa8947c7f74387ADF76C02B91096C2"/>
+    </anypoint-mq:config>
+    <vm:connector name="VM2" validateConnections="true" doc:name="VM"/>  
+    <flow name="payment_processorFlow" initialState="started">
+        <http:listener config-ref="HTTP_Listener_Configuration_PymentProcessor" path="/processor" doc:name="HTTP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <set-variable variableName="PaymentRaw2" value="#[payload]" doc:name="Variable" mimeType="application/json"/>
+        <objectstore:store config-ref="MyObjectStore" key="PAYMENT_REQUEST" value-ref="#[payload]" doc:name="ObjectStore" overwrite="true"/>
+        <logger message="Payment Processor processing payment #[payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message metadata:id="3dec0ffb-aabb-4222-ba1f-993299708d71" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:input-variable variableName="PaymentRaw2"/>
+            <dw:input-session-variable variableName="PaymentRawSession"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	Account: {
+		UserId: flowVars.PaymentRaw2.Payment.SourceAccount.UserId,
+		AccountNumber: flowVars.PaymentRaw2.Payment.SourceAccount.AccountNumber,
+		AccountType: flowVars.PaymentRaw2.Payment.SourceAccount.AccountType,
+		BankName: flowVars.PaymentRaw2.Payment.SourceAccount.BankName,
+		BankCode: flowVars.PaymentRaw2.Payment.SourceAccount.BankCode,
+		Currency:flowVars.PaymentRaw2.Payment.SourceAccount.Currency,
+		Sum: flowVars.PaymentRaw2.Payment.Sum * (flowVars.PaymentRaw2.Payment.ExchangeRate as :number)
+		
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <set-variable variableName="SumVar" value="#[json:Account/Sum]" mimeType="application/json" doc:name="Variable"/>
+        <set-variable variableName="AcctPayload" value="#[payload]" doc:name="Variable" mimeType="application/json"/>
+        <objectstore:store config-ref="MyObjectStore" key="TOTAL_SUM" value-ref="#[json:Account/Sum]" overwrite="true" doc:name="ObjectStore"/>
+        <set-payload value="#[flowVars.AcctPayload]" doc:name="Set Payload"/>
+        <flow-ref name="issuing_BankFlow" doc:name="issuing_BankFlow"/>
+        <dw:transform-message metadata:id="e0a2c50c-a350-49e9-a94c-aeef5e6c4b15" doc:name="Transform Message">
+            <dw:input-variable doc:sample="Payment_Submit.json" variableName="PaymentRaw"/>
+            <dw:input-variable variableName="PaymentRaw2"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	Account: {
+		UserId: flowVars.PaymentRaw2.Payment.DestinationAccount.UserId,
+		AccountNumber: flowVars.PaymentRaw2.Payment.DestinationAccount.AccountNumber,
+		AccountType: flowVars.PaymentRaw2.Payment.DestinationAccount.AccountType,
+		BankName: flowVars.PaymentRaw2.Payment.DestinationAccount.BankName,
+		BankCode: flowVars.PaymentRaw2.Payment.DestinationAccount."Bank Code",
+		Currency: flowVars.PaymentRaw2.Payment.DestinationAccount.Currency,
+		Sum: flowVars.PaymentRaw2.Payment.Sum
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <request-reply doc:name="Request-Reply">
+            <vm:outbound-endpoint exchange-pattern="one-way" path="dest.bank.queue" connector-ref="VM" doc:name="VM"/>
+            <vm:inbound-endpoint exchange-pattern="one-way" path="notification.queue.1" connector-ref="VM" doc:name="VM"/>
+        </request-reply>
+        <anypoint-mq:consume config-ref="Anypoint_MQ_Configuration" destination="amq.notifications.queue" doc:name="Anypoint MQ"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="++++ Notification Mesage going out: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="payment_processorFlow2">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="dest.bank.queue" connector-ref="VM" doc:name="VM"/>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration" destination="amq.ch.queue.1" doc:name="Anypoint MQ"/>
+    </flow>
+    <flow name="payment_processorFlow1">
+        <anypoint-mq:subscriber config-ref="Anypoint_MQ_Configuration" destination="amq.ch.queue.2" doc:name="Anypoint MQ"/>
+        <logger message="---payment synch" level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="payment.close.queue" connector-ref="VM" doc:name="VM"/>
+    </flow>
+    <flow name="payment_SendResponse">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="payment.close.queue" connector-ref="VM" doc:name="VM"/>
+        <objectstore:retrieve config-ref="MyObjectStore" key="SRC_ACCOUNT_BALANCE" doc:name="ObjectStore"/>
+        <set-variable variableName="SrcBalance" value="#[payload]" doc:name="Variable"/>
+        <objectstore:retrieve config-ref="MyObjectStore" key="DEST_ACCT_BALANCE" doc:name="ObjectStore"/>
+        <set-variable variableName="DestBalance" value="#[payload]" doc:name="Variable"/>
+        <objectstore:retrieve config-ref="MyObjectStore" key="TOTAL_SUM" doc:name="ObjectStore"/>
+        <set-variable variableName="TotalSum" value="#[payload]" doc:name="Variable"/>
+        <objectstore:retrieve config-ref="MyObjectStore" key="PAYMENT_REQUEST" doc:name="ObjectStore"/>
+        <set-variable variableName="PaymentReq" value="#[payload]" mimeType="application/json" doc:name="Variable"/>
+        <dw:transform-message metadata:id="a98442d4-3d1f-45d0-91e7-2439a2d482a8" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:input-variable variableName="PaymentReq"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	SourceAccount: flowVars.PaymentReq.Payment.SourceAccount.AccountNumber,
+	SourceAcountBalance: flowVars.SrcBalance as :string,
+	DestinationAccount: flowVars.PaymentReq.Payment.DestinationAccount.AccountNumber,
+	DestinationAcountBalance: flowVars.DestBalance as :string,
+	ConvertedSum: flowVars.TotalSum as :string,
+	ExchangeRate: flowVars.PaymentReq.Payment.ExchangeRate
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <set-variable variableName="NotificationPayload" value="#[payload]" mimeType="application/json" doc:name="Variable"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Notification data: #[payload]" level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="notification.device.queue.3" connector-ref="VM2" doc:name="VM"/>
+        <set-payload value="#[flowVars.NotificationPayload]" mimeType="application/json" doc:name="Set Payload"/>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration" destination="amq.notifications.queue" doc:name="Anypoint MQ"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="notification.queue.1" connector-ref="VM" doc:name="VM"/>
+    </flow>
+    <flow name="payment_processorNotification">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="notification.device.queue.3" connector-ref="VM2" doc:name="VM"/>
+        <logger message="Notifying Customer: #[payload]" level="INFO" doc:name="Logger"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <processor-chain>
+                <logger message="Sending  SMS" level="INFO" doc:name="Logger"/>
+                <set-payload value="Payment processes: SrcAcct: #[json:SourceAccount], DestAct: #[json:DestinationAccount], Sum: #[json:ConvertedSum]" doc:name="Set Payload"/>
+               <!-- 
+                <twilio:send-sms-message config-ref="Twilio" body="#[payload]" from="${twilio.phone.number.from}" to="6472747030" doc:name="Twilio"/>
+               -->
+            </processor-chain>
+            <processor-chain>
+                <logger message="Sending Tweet" level="INFO" doc:name="Logger"/>
+                <set-payload value="Payment processed: SrcAcct: #[json:SourceAccount], DestAct: #[json:DestinationAccount], Sum: #[json:ConvertedSum]" doc:name="Set Payload" mimeType="application/json"/>
+                <twitter:send-direct-message-by-screen-name config-ref="Twitter__Configuration_2" message="#[payload]" screenName="FreeRamses" doc:name="Twitter"/>
+            </processor-chain>
+        </scatter-gather>
+    </flow>
+</mule>

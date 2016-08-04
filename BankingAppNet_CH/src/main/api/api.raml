@@ -1,0 +1,82 @@
+#%RAML 0.8
+title: BankingAppNet_Customer360
+version: 1.0
+baseUri: http://bankingappnet-customer360.cloudhub.io
+
+
+/Customer:
+  get:
+    queryParameters:
+      print_pdf:
+        displayName: print PDF
+        type: boolean
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            schema:  !include CustomerListSchema.json
+            example:  !include CustomerResponseList.json
+            
+                                         
+    
+  /{cust_id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              schema:    !include CustomerSchema.json
+              example:  !include CustomerResponseExample.json
+                
+    post:
+      body:   
+         application/json:
+          schema:    !include CustomerSchema.json
+          example:  !include  CustomerResponseExample.json
+    put:
+      body:   
+         application/json:
+          schema:    !include CustomerSchema.json
+          example:  !include  CustomerResponseExample.json  
+    delete:
+    
+/resource.init:
+    get:
+      responses:
+        200:
+         body:
+          application/json:
+            example:  !include load_db_response.json
+    
+/Account:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:  !include AccountList_Resp.json
+  post:
+      body:   
+         application/json:
+          example:  !include  Account_Req.json
+  
+  /{account_id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example:  !include Account_Req.json   
+              
+    put:
+      body:   
+         application/json:
+              example:  !include  Account_Req.json  
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example:  !include Account_Req.json 
+    

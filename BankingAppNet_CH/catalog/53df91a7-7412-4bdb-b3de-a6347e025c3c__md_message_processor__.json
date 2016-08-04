@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "Web_Service_Consumer6",
+            "typeId": "ACCT_OUT"
+        }
+    },
+    "id": "53df91a7-7412-4bdb-b3de-a6347e025c3c",
+    "version": "5.2.0.0"
+}

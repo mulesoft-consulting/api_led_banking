@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "Web_Service_Consumer",
+            "typeId": "RESP"
+        }
+    },
+    "id": "08427736-d475-4868-86ff-2c053976c6f3",
+    "version": "5.2.0.0"
+}

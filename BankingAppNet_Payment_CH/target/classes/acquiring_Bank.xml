@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/current/mule-objectstore.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <flow name="acquiring_BankFlow">
+        <anypoint-mq:subscriber config-ref="Anypoint_MQ_Configuration" destination="amq.ch.queue.1" doc:name="Anypoint MQ" acknowledgementMode="AUTO"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Into aquiring bank , account:  #[json:Account/AccountNumber] - #[payload]" level="INFO" doc:name="Logger"/>
+        <vm:outbound-endpoint exchange-pattern="one-way" path="inner.queue" connector-ref="VM" doc:name="VM"/>
+    </flow>
+    <flow name="acquiring_BankFlow1">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="inner.queue" connector-ref="VM" doc:name="VM"/>
+        <set-variable variableName="AccountPayment" value="#[payload]" mimeType="application/json" doc:name="Variable"/>
+        <tracking:custom-event event-name="AcquiringBankPayment" doc:name="Copy_of_Custom Business Event">
+            <tracking:meta-data key="AcctNum" value="#[json:Account/AccountNumber]"/>
+            <tracking:meta-data key="Bank" value="#[json:Account/BankName]"/>
+            <tracking:meta-data key="UserId" value="#[json:Account/UserId]"/>
+            <tracking:meta-data key="Sum" value="#[json:Account/Sum]"/>
+        </tracking:custom-event>
+        <dw:transform-message metadata:id="7ede99ce-7280-4f82-ae55-2c33a83ff988" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	Account: {
+		CustomerId: payload.Account.UserId,
+		AccountNumber: payload.Account.AccountNumber,
+		AccountType: payload.Account.AccountType
+	}
+}]]></dw:set-payload>
+            <dw:set-variable variableName="_acct_number"><![CDATA[%dw 1.0
+%output application/java
+---
+payload.Account.AccountNumber]]></dw:set-variable>
+        </dw:transform-message>
+        <http:request config-ref="HTTP_Request_Configuration_AccountsAPI" path="/Account/{account_id}" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="account_id" value="#[flowVars._acct_number]"/>
+            </http:request-builder>
+        </http:request>
+        <dw:transform-message metadata:id="405eb839-73eb-4cd5-bde4-01e64fc8ad56" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:input-variable variableName="AccountPayment"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	Account: {
+		CustomerId: payload.Account.CustomerId,
+		AccountNumber: payload.Account.AccountNumber,
+		AccountType: payload.Account.AccountType,
+		AccountBalance: payload.Account.AccountBalance + flowVars.AccountPayment.Account.Sum,
+		AccountInterestRate: payload.Account.AccountInterestRate
+	}
+}]]></dw:set-payload>
+            <dw:set-variable variableName="_balance"><![CDATA[%dw 1.0
+%output application/java
+---
+payload.Account.AccountBalance + flowVars.AccountPayment.Account.Sum]]></dw:set-variable>
+        </dw:transform-message>
+        <set-variable variableName="DestAcct" value="#[payload]" mimeType="application/json" doc:name="Variable"/>
+        <objectstore:store config-ref="MyObjectStore" key="DEST_ACCT_BALANCE" value-ref="#[flowVars._balance]" doc:name="ObjectStore" overwrite="true"/>
+        <set-payload value="#[flowVars.DestAcct]" mimeType="application/json" doc:name="Set Payload"/>
+        <http:request config-ref="HTTP_Request_Configuration_AccountsAPI" path="/Account/{acount_id}" method="PUT" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="account_id" value="#[flowVars._acct_number]"/>
+            </http:request-builder>
+        </http:request>
+        <anypoint-mq:publish config-ref="Anypoint_MQ_Configuration" destination="amq.ch.queue.2" doc:name="Anypoint MQ"/>
+    </flow>
+</mule>

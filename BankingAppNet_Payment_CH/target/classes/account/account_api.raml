@@ -1,0 +1,39 @@
+#%RAML 0.8
+title: BankingAppNet_Customer_Account
+version: 1.0
+baseUri: http://bankingappnet-customer-acount.cloudhub.io
+
+/Account:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example:  !include AccountList_Resp.json
+  post:
+      body:   
+         application/json:
+          example:  !include  Account_Req.json
+      
+   
+            
+  /{account_id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example:  !include Account_Req.json           
+    
+    put:
+      body:   
+         application/json:
+              example:  !include  Account_Req.json  
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example:  !include Account_Req.json  
+      
+    

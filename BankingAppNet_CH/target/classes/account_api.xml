@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <http:listener-config name="account_api-httpListenerConfig" host="0.0.0.0" port="${http.port.account}" doc:name="HTTP Listener Configuration"/>
+    <apikit:config name="account_api-config" raml="account_api.raml" consoleEnabled="false" doc:name="Router"/>
+    <ws:consumer-config name="Web_Service_Consumer_Accts_getALl" service="CustomerAccountsServiceAll" port="CustomerAccountsPortAll" serviceAddress="http://localhost:8084/CustomerAcountsService/soap/all" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer3" service="CustomerAccountsServiceSingle" port="CustomerAccountsPortSingle" serviceAddress="http://localhost:8084/CustomerAcountsService/soap/single" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer5" service="CustomerAccountsServiceCreate" port="CustomerAccountsPortCreate" serviceAddress="http://localhost:8084/CustomerAcountsService/soap/create" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer4" service="CustomerAccountsServiceUpdate" port="CustomerAccountsPortUpdate" serviceAddress="http://localhost:8084/CustomerAcountsService/soap/update" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer2" service="CustomerAccountsServiceUpdate" port="CustomerAccountsPortUpdate" serviceAddress="http://localhost:8084/CustomerAcountsService/soap/update" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer6" service="CustomerAccountsServiceDelete" port="CustomerAccountsPortDelete" serviceAddress="http://localhost:8084/CustomerAcountsService/soap/delete" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" doc:name="Web Service Consumer"/>
+    <flow name="account_api-main">
+        <http:listener config-ref="account_api-httpListenerConfig" path="/api/account/*" doc:name="HTTP"/>
+        <apikit:router config-ref="account_api-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="account_api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="account_api-console">
+        <http:listener config-ref="account_api-httpListenerConfig" path="/console/*" doc:name="HTTP"/>
+        <apikit:console config-ref="account_api-config" doc:name="APIkit Console"/>
+    </flow>
+   
+    <flow name="delete:/Account/{account_id}:account_api-config">
+        <logger message="deleteing account !" level="INFO" doc:name="Logger"/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_NUM: {
+		ns0#acct_number: flowVars.account_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="Web_Service_Consumer6" doc:name="Web Service Consumer" operation="deleteCustomerAccount"/>
+        <dw:transform-message metadata:id="9ffaff6c-3d75-4faa-9f6c-2c8ad61398d9" doc:name="Transform Message">
+            <dw:input-payload doc:sample="sample_data/ACCT_OUT.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ACCT_OUT: {
+		acct_number: payload.ns0#ACCT_OUT.ns0#acct_number,
+		acct_cust_id: payload.ns0#ACCT_OUT.ns0#acct_cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String" mimeType="application/json"/>
+        <logger message="Deleted account: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="get:/Account:account_api-config">
+        <logger message="getting all acounts !" level="INFO" doc:name="Logger"/>
+        <ws:consumer config-ref="Web_Service_Consumer_Accts_getALl" operation="getCustomerAccountsAll" doc:name="Web Service Consumer"/>
+        <dw:transform-message metadata:id="de1af9bd-5eba-4305-b890-6ed680c5d27a" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	Accounts: payload.ns0#ACCT_RESP.ns0#AccountList.*ns0#Account map ((account , indexOfAccount) -> {
+		AccountNumber: account.ns0#acct_number,
+		AccountType: account.ns0#acct_type,
+		AccountBalance: account.ns0#acct_balance,
+		AccountInterestRate: account.ns0#acct_interest_rate
+	})
+}]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+    <flow name="get:/Account/{account_id}:account_api-config">
+        <set-variable variableName="AcountId" value="#[flowVars.account_id]" doc:name="Variable"/>
+        <logger message="getting account data for: #[flowVars.AcountId]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message" metadata:id="14496407-4274-4b5c-a999-5aa772ad0816">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_NUM: {
+		ns0#acct_number: flowVars.AcountId
+
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="Web_Service_Consumer3" operation="getCustomerAccountsSingle" doc:name="Web Service Consumer"/>
+        <dw:transform-message metadata:id="aea4e0c9-c3f7-4af4-b293-05a2d279d628" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	Account: {
+		CustomerId: payload.ns0#ACCT.ns0#Account.ns0#acct_cust_id,
+		AccountNumber: payload.ns0#ACCT.ns0#Account.ns0#acct_number,
+		AccountType: payload.ns0#ACCT.ns0#Account.ns0#acct_type,
+		AccountBalance: payload.ns0#ACCT.ns0#Account.ns0#acct_balance,
+		AccountInterestRate: payload.ns0#ACCT.ns0#Account.ns0#acct_interest_rate
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+    </flow>
+    <flow name="post:/Account:account_api-config">
+        <byte-array-to-string-transformer doc:name="Byte Array to String" mimeType="application/json"/>
+        <dw:transform-message metadata:id="32b67311-6d36-43d8-b45d-0bdbd84867f8" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#Account: {
+		ns0#acct_cust_id: payload.Account.CustomerId,
+		ns0#acct_number: payload.Account.AccountNumber,
+		ns0#acct_type: payload.Account.AccountType,
+		ns0#acct_balance: payload.Account.AccountBalance,
+		ns0#acct_interest_rate: payload.Account.AccountInterestRate
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="Web_Service_Consumer5" operation="createCustomerAccount" doc:name="Web Service Consumer"/>
+        <dw:transform-message doc:name="Transform Message" metadata:id="e881a3ba-3c32-411f-8863-478779a754db">
+            <dw:input-payload doc:sample="sample_data/ACCT_REQ.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ACCT_OUT: {
+		acct_cust_id: payload.ns0#ACCT_REQ.ns0#acct_cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String" mimeType="application/json"/>
+        <logger message="Created Account: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    
+     <flow name="put:/Account/{account_id}:account_api-config">
+        <byte-array-to-string-transformer doc:name="Byte Array to String" mimeType="application/json"/>
+        <dw:transform-message metadata:id="4055a905-38c9-4c0b-bf7e-19cf8d50c191" doc:name="Transform Message">
+            <dw:input-payload/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#Account: {
+		ns0#acct_cust_id: payload.Account.CustomerId,
+		ns0#acct_number: payload.Account.AccountNumber,
+		ns0#acct_type: payload.Account.AccountType,
+		ns0#acct_balance: payload.Account.AccountBalance,
+		ns0#acct_interest_rate: payload.Account.AccountInterestRate
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="Web_Service_Consumer2" operation="updateCustomerAccount" doc:name="Web Service Consumer"/>
+        <!--
+        <ws:consumer config-ref="Web_Service_Consumer4" operation="updateCustomerAccount" doc:name="Web Service Consumer"/>
+        -->
+        <dw:transform-message doc:name="Transform Message" metadata:id="086a4a18-d841-4134-bf1e-55371ab03582">
+            <dw:input-payload doc:sample="sample_data/ACCT_REQ_1.xml"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ACCT_OUT: {
+		acct_number: payload.ns0#ACCT_OUT.ns0#acct_number,
+		acct_cust_id: payload.ns0#ACCT_OUT.ns0#acct_cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String" mimeType="application/json"/>
+        <logger message="Updated Account: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    
+    
+    <apikit:mapping-exception-strategy name="account_api-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>

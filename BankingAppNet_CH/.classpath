@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main/app"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="src/test/munit"/>
+	<classpathentry kind="src" path="src/main/api"/>
+	<classpathentry kind="src" path="src/main/resources"/>
+	<classpathentry kind="src" path="src/main/wsdl"/>
+	<classpathentry kind="con" path="MULE_LIB/APIkit/org.mule.tooling.apikit.3.7.0"/>
+	<classpathentry kind="src" path="src/main/java"/>
+	<classpathentry kind="lib" path="src/main/app/lib/mysql-connector-java-5.1.15.jar"/>
+	<classpathentry kind="con" path="MULE_LIB/ObjectStore/org.mule.tooling.ui.contribution.objectstore.3.6.0"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet/src/main/resources/lib/derby.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet/src/main/resources/lib/pdfbox-app-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet/src/main/resources/lib/itext-pdfa-5.5.9.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet/src/main/resources/lib/itext-xtra-5.5.9.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet/src/main/resources/lib/itextpdf-5.5.9.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet/src/main/resources/lib/xmlworker-5.5.9.jar"/>
+	<classpathentry kind="con" path="MULE_LIB/Twilio/org.mule.tooling.ui.contribution.twilio"/>
+	<classpathentry exported="true" kind="con" path="MULE_RUNTIME/org.mule.tooling.server.3.7.3.ee"/>
+	<classpathentry kind="con" path="MULE_LIB/Salesforce/org.mule.tooling.ui.contribution.sfdc.3.5.0"/>
+	<classpathentry kind="con" path="MULE_LIB/Anypoint MQ/org.mule.tooling.messaging.contribution"/>
+	<classpathentry kind="con" path="MULE_LIB/Twitter/org.mule.tooling.ui.contribution.twitter.3.6.0"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

@@ -1,0 +1,16 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "DemographicsList_POJO"
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "Web_Service_Consumer",
+            "typeId": "RESP"
+        }
+    },
+    "id": "1ee06afe-e585-463c-99ba-4b136e129aec",
+    "version": "5.2.0.0"
+}

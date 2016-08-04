@@ -1,0 +1,16 @@
+ {"Accounts":[
+        {
+          "CustomerId":"123",
+          "AccountNumber":"12345-sv",
+          "AccountType":"Savings",
+          "AccountBalance":999999.00,
+          "AccountInterestRate":0.5
+        },
+        {
+           "CustomerId":"123",
+           "AccountNumber":"12345-cq",
+           "AccountType":"Savings",
+           "AccountBalance":2000.00,
+           "AccountInterestRate":1.0
+        }
+      ]}

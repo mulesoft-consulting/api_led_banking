@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:twitter="http://www.mulesoft.org/schema/mule/twitter" xmlns:twilio="http://www.mulesoft.org/schema/mule/twilio" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:objectstore="http://www.mulesoft.org/schema/mule/objectstore" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:ws="http://www.mulesoft.org/schema/mule/ws" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+http://www.mulesoft.org/schema/mule/ws http://www.mulesoft.org/schema/mule/ws/current/mule-ws.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/current/mule-objectstore.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/twilio http://www.mulesoft.org/schema/mule/twilio/current/mule-twilio.xsd
+http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/twitter/current/mule-twitter.xsd">
+
+	<twitter:config name="Twitter__Configuration_2" accessKey="2334061002-eAsrPugWmItAELi63qOk0w8PdsPDpND5WUO8lNe" accessSecret="BZbcMghzv10i0g7FKInG9VWaRr9RwVQe4DdtHJVDDMycH" consumerKey="JaC19tbjwNkp7pKm0bzZcIxZG" consumerSecret="ExmfK92XAmYV2t2lT8qUqBRsGIHIZUl9PyD7T7BuR27XLwumxL" doc:name="Twitter: Configuration"/>
+  
+     <twilio:config name="Twilio" accountSid="${twilio.app.id}" authToken="${twilio.app.token}" doc:name="Twilio">
+    	<twilio:http-callback-config></twilio:http-callback-config>
+    </twilio:config>
+    <http:listener-config name="api-httpListenerConfig" host="0.0.0.0" port="${http.port}" doc:name="HTTP Listener Configuration"/>
+    <apikit:config name="api-config" raml="api.raml" consoleEnabled="true" consolePath="console" doc:name="Router">
+        <apikit:flow-mapping resource="/resource.init" action="get" flow-ref="dbFlow"/>
+        <apikit:flow-mapping resource="/Account" action="get" flow-ref="customer_getAllAccounts"/>
+        <apikit:flow-mapping resource="/Account" action="post" flow-ref="customer_createAccount"/>
+        <apikit:flow-mapping resource="/Account/{account_id}" action="get" flow-ref="customer_getAccount"/>
+        <apikit:flow-mapping resource="/Account/{account_id}" action="put" flow-ref="customer_updateAccount"/>
+         <apikit:flow-mapping resource="/Account/{account_id}" action="delete" flow-ref="customer_deleteAccount"/>
+    </apikit:config>
+    <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="WSDL/Cust_Demographics_WSDL.wsdl" service="CustomerDemographicsService" port="CustomerDemographicsPort" serviceAddress="http://localhost:8083/CustomerDemographicsService/soap" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer_Demographics_all" wsdlLocation="WSDL/Cust_Demographics_WSDL.wsdl" service="CustomerDemographicsServiceAll" port="CustomerDemographicsPortAll" serviceAddress="http://localhost:8083/CustomerDemographicsService/soap/all" doc:name="Web Service Consumer"/>
+    <ws:consumer-config name="Web_Service_Consumer1" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" service="CustomerAccountsService" port="CustomerAccountsPort" serviceAddress="http://localhost:8084/CustomerAcountsService/soap" doc:name="Web Service Consumer"/>
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8085" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration_CustSingle" host="localhost" port="8081" doc:name="HTTP Request Configuration"/>
+    <spring:beans>
+        <spring:bean id="CustomerDemographicsBean" name="CustomerDemographicsBean" class="com.coast.CustomerDemographicsRecord" scope="prototype"/>
+        <spring:bean id="CustomCustomerAggregatorBean" name="CustomCustomerAggregatorBean" class="com.coast.CustomCustomerAggregator"/>
+    </spring:beans>
+    <spring:beans>
+        <spring:bean id="CEMObjectStore" class="org.mule.util.store.SimpleMemoryObjectStore"/>
+    </spring:beans>
+    <objectstore:config name="MyObjectStore" objectStore-ref="CEMObjectStore" doc:name="ObjectStore"/>
+    <http:request-config name="HTTP_Request_Configuration_DB_Config" host="localhost" port="${db.config.port}" doc:name="HTTP Request Configuration"/>
+    <ws:consumer-config name="Web_Service_Consumer_createDemographics" wsdlLocation="WSDL/Cust_Demographics_WSDL.wsdl" service="CustomerDemographicsServiceCreateCustomer" port="CustomerDemographicsPortCreateCustomer" serviceAddress="http://localhost:8083/CustomerDemographicsService/soap/create" doc:name="Web Service Consumer"/>
+    <http:request-config name="HTTP_Request_Configuration_Accounts" host="${account.api.url}" port="${http.port.account}" basePath="/api/account" doc:name="HTTP Request Configuration"/>
+    
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
+        <apikit:router config-ref="api-config" doc:name="APIkit Router"/>
+        <exception-strategy ref="api-apiKitGlobalExceptionMapping" doc:name="Reference Exception Strategy"/>
+    </flow>
+    <flow name="put:/Customer/{cust_id}:application/json:api-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="delete:/Customer/{cust_id}:api-config">
+        <set-payload value="#[NullPayload.getInstance()]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="get:/Customer:api-config">
+        <set-variable variableName="cust_req_id" value="CUST_LIST_#[message.id]" doc:name="Variable"/>
+        <set-variable variableName="print_pdf" value="#[message.inboundProperties.'http.query.params'.print_pdf]" doc:name="Variable"/>
+        <logger message="Getting all customers: print_pdf=#[flowVars.print_pdf], Corrrelation ID: #[flowVars.cust_req_id]" level="INFO" doc:name="Logger"/>
+       <ws:consumer config-ref="Web_Service_Consumer_Demographics_all" operation="getCustomerDemographicsAll" doc:name="DeographicsWSAll"/>
+        <dw:transform-message metadata:id="de869f67-981a-45a5-a274-e6f149f2ec07" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+%namespace ns0 http://Customer360/XSD/CustomerDemographics.xsd
+---
+payload.ns0#RESP.ns0#CustomerRecordList.*ns0#CustomerRecord map ((customerRecord , indexOfCustomerRecord) -> {
+	address: customerRecord.ns0#address,
+	age: customerRecord.ns0#cust_id as :number,
+	city: customerRecord.ns0#city,
+	country: customerRecord.ns0#country,
+	custId: customerRecord.ns0#cust_id,
+	firstName: customerRecord.ns0#first_name,
+	lastName: customerRecord.ns0#last_name,
+	married: customerRecord.ns0#married,
+	province: customerRecord.ns0#province
+})]]></dw:set-payload>
+        </dw:transform-message>
+        <foreach collection="#[payload]" counterVariableName="custCounter" doc:name="For Each">
+            <set-variable variableName="single_cust_call" value="/api/Customer/#[payload.custId]" doc:name="Variable"/>
+            <logger message="customer record:#[flowVars.single_cust_call]" level="INFO" doc:name="Logger"/>
+            <http:request config-ref="HTTP_Request_Configuration_CustSingle" path="#[flowVars.single_cust_call]" method="GET" doc:name="getCustomerById"/>
+            <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+            <component  doc:name="CustomerAggregator">
+                <singleton-object class="com.coast.CustomCustomerAggregator"/>
+            </component>
+        </foreach>
+        <objectstore:retrieve config-ref="MyObjectStore" key="#[flowVars.cust_req_id]" doc:name="ObjectStore"/>
+        <logger message=" @@@@@ aggregate customer list size : #[payload.size()]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+CustomerList : payload map lookup("customer_setSubflow", $)]]></dw:set-payload>
+        </dw:transform-message>
+ 
+        <!-- <custom-transformer class="com.coast.Custom_Customer_JSON_Transformer" doc:name="ListToJSON_transformer"/> -->
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <set-variable variableName="final_payload" value="#[payload]" doc:name="Variable"/>
+        <set-payload value="#[flowVars.final_payload]" doc:name="Set Payload"/>
+        <async doc:name="Async">
+            <scatter-gather doc:name="Scatter-Gather">
+                <choice doc:name="Choice">
+                    <when expression="#[flowVars.print_pdf=='true']">
+                        <vm:outbound-endpoint exchange-pattern="one-way" path="printer.queue" connector-ref="VM" doc:name="VM"/>
+                    </when>
+                    <otherwise>
+                        <logger message="Not printing PDF !" level="INFO" doc:name="Logger"/>
+                    </otherwise>
+                </choice>
+                <objectstore:remove config-ref="MyObjectStore" key="#[flowVars.cust_req_id]" ignoreNotExists="true" doc:name="ObjectStore"/>
+            </scatter-gather>
+        </async>
+        <logger message="GetAllCustomersPayload: #[payload]" level="INFO" doc:name="Logger"/>
+             <!-- <custom-transformer class="com.coast.Custom_Customer_JSON_Transformer" doc:name="POJOtoJSON Transformer"/>-->
+    </flow>
+    <flow name="get:/Customer/{cust_id}:api-config">
+        <logger message="Cust_Id: #[flowVars.cust_id]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://Customer360/XSD/CustomerDemographics.xsd
+---
+{
+	ns0#REQ: {
+		ns0#cust_id: flowVars.cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="Web_Service_Consumer" operation="getCustomerDemographics" doc:name="DemographicsWS"/>
+        <set-variable variableName="demographics_var" value="#[payload]" mimeType="application/xml" doc:name="Variable"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	ns0#ACCT_REQ: {
+		ns0#acct_cust_id: flowVars.cust_id
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <ws:consumer config-ref="Web_Service_Consumer1" operation="getCustomerAccounts" doc:name="AccountsWS"/>
+        <set-variable variableName="customer_acounts_var" value="#[payload]" mimeType="application/xml" doc:name="Variable"/>
+        <http:request config-ref="HTTP_Request_Configuration" path="/loans/single" method="GET" doc:name="Loans">
+            <http:request-builder>
+                <http:query-param paramName="cust_id" value="#[flowVars.cust_id]"/>
+            </http:request-builder>
+        </http:request>
+        <set-variable variableName="cust_loans_var" value="#[payload]" doc:name="Variable" mimeType="application/json"/>
+        <dw:transform-message metadata:id="d1a73da7-2745-4bd4-92eb-aab247ad2fef" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://Customer360/XSD/CustomerDemographics.xsd
+%namespace ns01 http://CustomerAccounts/XSD/CustomerAccount.xsd
+---
+{
+	Customer: {
+		CustomerId: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#cust_id,
+		Demographics: {
+			FirstName: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#first_name,
+			LastName: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#last_name,
+			Address: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#address,
+			City: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#city,
+			Province: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#province,
+			Country: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#country,
+			Age: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#age,
+			MaritalStatus: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#married
+		},
+		(Accounts: flowVars.customer_acounts_var.ns01#ACCT_RESP.ns01#AccountList.*ns01#Account map ((account , indexOfAccount) -> {
+			AccountNumber: account.ns01#acct_number,
+			AccountType: account.ns01#acct_type,
+			AccountBalance: account.ns01#acct_balance,
+			AccountInterestRate: account.ns01#acct_interest_rate
+		})) when flowVars.customer_acounts_var.ns01#ACCT_RESP.ns01#AccountList[0] != null,
+		(Loans: flowVars.cust_loans_var.LoansList[0].Loans) when flowVars.cust_loans_var.LoansList.Loans[0] !=null
+		
+	}
+}]]></dw:set-payload>
+            <dw:set-variable variableName="NAME"><![CDATA[%dw 1.0
+%output application/json
+%namespace ns0 http://Customer360/XSD/CustomerDemographics.xsd
+---
+{
+	FirstName: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#first_name,
+	LastName: flowVars.demographics_var.ns0#RESP.ns0#CustomerRecordList.ns0#CustomerRecord.ns0#last_name
+}]]></dw:set-variable>
+        </dw:transform-message>
+        <tracking:custom-event event-name="CustomerEvent" doc:name="Custom Business Event">
+            <tracking:meta-data key="CustomerId" value="#[flowVars.cust_id]"/>
+            <tracking:meta-data key="Name" value="#[json:Customer/Demographics/FirstName] #[json:Customer/Demographics/LastName]"/>
+            <tracking:meta-data key="account_1" value="#[json:Customer/Accounts[0]/AccountNumber] : #[json:Customer/Accounts[0]/AccountType] "/>
+            <tracking:meta-data key="cc_1" value="#[json:Customer/Loans/CreditCards[0]/CCNumber] : #[json:Customer/Loans/CreditCards[0]/CCType] "/>
+        </tracking:custom-event>
+        <set-variable variableName="FINAL_PAYLOAD" value="#[payload]" mimeType="application/json" doc:name="Variable"/>
+        <set-payload value="#[flowVars.NAME]" doc:name="Set Payload"/>
+        <flow-ref name="sfdc_contactFlow" metadata:id="1a78fdf6-16a0-48c4-9511-d509f24a12d4" doc:name="sfdc_contactFlow"/>
+        <dw:transform-message metadata:id="cf81f518-2998-4881-bc07-f4e869689aa8" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	Customer: {
+		CustomerId: flowVars.FINAL_PAYLOAD.Customer.CustomerId,
+		Demographics: {
+			FirstName: flowVars.FINAL_PAYLOAD.Customer.Demographics.FirstName,
+			LastName: flowVars.FINAL_PAYLOAD.Customer.Demographics.LastName,
+			Address: flowVars.FINAL_PAYLOAD.Customer.Demographics.Address,
+			City: flowVars.FINAL_PAYLOAD.Customer.Demographics.City,
+			Province: flowVars.FINAL_PAYLOAD.Customer.Demographics.Province,
+			Country: flowVars.FINAL_PAYLOAD.Customer.Demographics.Country,
+			Age: flowVars.FINAL_PAYLOAD.Customer.Demographics.Age,
+			MaritalStatus: flowVars.FINAL_PAYLOAD.Customer.Demographics.MaritalStatus,
+			email: payload.Email,
+			Phone: payload.Phone
+		},
+		Accounts: flowVars.FINAL_PAYLOAD.Customer.Accounts,
+		Loans: flowVars.FINAL_PAYLOAD.Customer.Loans
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <logger message="Got Customer 360 Data: #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="customer_setSubflow">
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+    </flow>
+    <flow name="post:/Customer/{cust_id}:application/json:api-config">
+        <logger message="Adding Customer: #[flowVars.cust_id] ; #[message.payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message metadata:id="a0cff9ff-7790-466c-88d4-cc943e120269" doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload]]></dw:set-payload>
+        </dw:transform-message>
+        <objectstore:store config-ref="MyObjectStore" key="CUST_RECORD" value-ref="#[payload]" doc:name="ObjectStore"/>
+        <logger level="INFO" doc:name="Logger" message="**** CusomerID creation: #[payload.Customer.CustomerId]"/>
+        <scatter-gather doc:name="Scatter-Gather">
+            <processor-chain>
+                <logger message="Demographics Path" level="INFO" doc:name="Demographics"/>
+                <choice doc:name="Choice">
+                    <when expression="#[payload.Customer.Demographics !=null]">
+                        <logger message="Creating new Customer : #[payload.Customer.CustomerId]" level="INFO" doc:name="Logger"/>
+                        <dw:transform-message metadata:id="053359b5-538d-48bf-a32f-a692062d5833" doc:name="Transform Message">
+                            <dw:set-payload><![CDATA[%dw 1.0
+%output application/xml
+%namespace ns0 http://Customer360/XSD/CustomerDemographics.xsd
+---
+{
+	ns0#CustomerRecord: {
+		ns0#cust_id: payload.Customer.CustomerId,
+		ns0#first_name: payload.Customer.Demographics.FirstName,
+		ns0#last_name: payload.Customer.Demographics.LastName,
+		ns0#address: payload.Customer.Demographics.Address,
+		ns0#city: payload.Customer.Demographics.City,
+		ns0#province: payload.Customer.Demographics.Province,
+		ns0#country: payload.Customer.Demographics.Country,
+		ns0#age: payload.Customer.Demographics.Age as :number,
+		ns0#married: payload.Customer.Demographics.MaritalStatus
+	}
+}]]></dw:set-payload>
+                        </dw:transform-message>
+                        <ws:consumer config-ref="Web_Service_Consumer_createDemographics" operation="createCustomerDemographics" doc:name="Web Service Consumer"/>
+                    </when>
+                    <otherwise>
+                        <logger message="No Demographics data available !" level="INFO" doc:name="Logger"/>
+                    </otherwise>
+                </choice>
+            </processor-chain>
+            <processor-chain>
+                <logger message="Loans Path" level="INFO" doc:name="Loans"/>
+                <choice doc:name="Choice">
+                    <when expression="#[payload.Customer.Loans !=null]">
+                        <logger message="Creating Loans : #[payload.Customer.customerId]" level="INFO" doc:name="Logger"/>
+                    </when>
+                    <otherwise>
+                        <logger message="No loans data available !" level="INFO" doc:name="Logger"/>
+                    </otherwise>
+                </choice>
+            </processor-chain>
+            <processor-chain>
+                <logger message="Acounts Path" level="INFO" doc:name="Accounts"/>
+                <choice doc:name="Choice">
+                    <when expression="#[payload.Customer.Accounts !=null]">
+                        <logger message="Creating new Accounts : #[payload.Customer.customerId]" level="INFO" doc:name="Logger"/>
+                    </when>
+                    <otherwise>
+                        <logger message="No accounts Data available !" level="INFO" doc:name="Logger"/>
+                    </otherwise>
+                </choice>
+            </processor-chain>
+        </scatter-gather>
+        <objectstore:retrieve config-ref="MyObjectStore" key="CUST_RECORD" doc:name="ObjectStore"/>
+        <twitter:send-direct-message-by-screen-name config-ref="Twitter__Configuration_2" doc:name="Twitter" message="Created Customer Record: CustomerId: #[payload.Customer.CustomerId] , Name: #[payload.Customer.Demographics.FirstName] #[payload.Customer.Demographics.LastName]" screenName="FreeRamses"/>
+        <objectstore:remove config-ref="MyObjectStore" key="CUST_RECORD" doc:name="ObjectStore"/>
+    
+    </flow>
+    <flow name="dbFlow">
+        <logger message="Initializing Derby DB !" level="INFO" doc:name="Logger"/>
+        <http:request config-ref="HTTP_Request_Configuration_DB_Config" path="/init/db/load" method="GET" doc:name="HTTP"/>
+    </flow>
+    <flow name="customer_getAllAccounts">
+        <logger message="###Getting all accounts !" level="INFO" doc:name="Logger"/>
+        <http:request config-ref="HTTP_Request_Configuration_Accounts" path="/Account" method="GET" doc:name="HTTP"/>
+    </flow>
+    <flow name="customer_createAccount">
+        <logger message="###Creating Account !" level="INFO" doc:name="Logger"/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+        <http:request config-ref="HTTP_Request_Configuration_Accounts" path="/Account" method="POST" doc:name="HTTP" metadata:id="fe9bd814-d274-4466-b527-ab422ee54aea"/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+    </flow>
+    <flow name="customer_getAccount">
+        <logger message="#### Getting Account  = #[flowVars.account_id]" level="INFO" doc:name="Logger"/>
+        <http:request config-ref="HTTP_Request_Configuration_Accounts" path="/Account/{account_id}" method="GET" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="account_id" value="#[flowVars.account_id]"/>
+            </http:request-builder>
+        </http:request>
+    </flow>
+    <flow name="customer_updateAccount">
+        <logger message="###Updating Account :#[flowVars.account_id] : #[payload]" level="INFO" doc:name="Logger"/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+        <http:request config-ref="HTTP_Request_Configuration_Accounts" path="/Account/{account_id}" method="PUT" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="account_id" value="#[flowVars.account_id]"/>
+            </http:request-builder>
+        </http:request>
+    </flow>
+    <flow name="customer_deleteAccount">
+        <logger message="####Deleting Account: #[flowVars.account_id]" level="INFO" doc:name="Logger"/>
+        <set-payload value="#[payload]" mimeType="application/json" doc:name="Set Payload"/>
+        <http:request config-ref="HTTP_Request_Configuration_Accounts" path="/Account/{account_id}" method="DELETE" doc:name="HTTP">
+            <http:request-builder>
+                <http:uri-param paramName="account_id" value="#[flowVars.account_id]"/>
+            </http:request-builder>
+        </http:request>
+    </flow>
+    <apikit:mapping-exception-strategy name="api-apiKitGlobalExceptionMapping">
+        <apikit:mapping statusCode="404">
+            <apikit:exception value="org.mule.module.apikit.exception.NotFoundException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Resource not found&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="405">
+            <apikit:exception value="org.mule.module.apikit.exception.MethodNotAllowedException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Method not allowed&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="415">
+            <apikit:exception value="org.mule.module.apikit.exception.UnsupportedMediaTypeException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Unsupported media type&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="406">
+            <apikit:exception value="org.mule.module.apikit.exception.NotAcceptableException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Not acceptable&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+        <apikit:mapping statusCode="400">
+            <apikit:exception value="org.mule.module.apikit.exception.BadRequestException" />
+            <set-property propertyName="Content-Type" value="application/json" doc:name="Property"/>
+            <set-payload value="{ &quot;message&quot;: &quot;Bad request&quot; }" doc:name="Set Payload"/>
+        </apikit:mapping>
+    </apikit:mapping-exception-strategy>
+</mule>

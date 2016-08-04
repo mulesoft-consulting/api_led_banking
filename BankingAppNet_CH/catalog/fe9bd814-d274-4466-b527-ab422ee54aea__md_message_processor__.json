@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "account_create_out_json"
+        }
+    },
+    "id": "fe9bd814-d274-4466-b527-ab422ee54aea",
+    "version": "5.2.0.0"
+}

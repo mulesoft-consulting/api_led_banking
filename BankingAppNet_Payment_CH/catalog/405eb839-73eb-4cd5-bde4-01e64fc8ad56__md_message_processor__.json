@@ -1,0 +1,28 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Account_JSON"
+        },
+        "flowVariables": {
+            "AccountPayment": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "Account_Fragment_JSON"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Account_JSON"
+        },
+        "flowVariables": {
+            "_balance": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "_balance_sum"
+            }
+        }
+    },
+    "id": "405eb839-73eb-4cd5-bde4-01e64fc8ad56",
+    "version": "5.2.0.0"
+}

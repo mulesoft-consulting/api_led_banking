@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-project xmlns="http://www.mulesoft.com/tooling/project" runtimeId="org.mule.tooling.server.3.7.3.ee" schemaVersion="5.3.0.0">
+    <name>BankingAppNet_CH</name>
+    <description></description>
+    <muleExtension name="APIkit" qualifier="org.mule.tooling.apikit.3.7.0"/>
+    <muleExtension name="ObjectStore" qualifier="org.mule.tooling.ui.contribution.objectstore.3.6.0"/>
+    <muleExtension name="Twilio" qualifier="org.mule.tooling.ui.contribution.twilio"/>
+    <muleExtension name="Salesforce" qualifier="org.mule.tooling.ui.contribution.sfdc.3.5.0"/>
+    <muleExtension name="Anypoint MQ" qualifier="org.mule.tooling.messaging.contribution"/>
+    <muleExtension name="Twitter" qualifier="org.mule.tooling.ui.contribution.twitter.3.6.0"/>
+</mule-project>

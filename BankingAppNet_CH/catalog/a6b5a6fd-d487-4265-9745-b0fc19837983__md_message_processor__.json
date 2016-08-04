@@ -1,0 +1,11 @@
+{
+    "inputMessageMetadata": {},
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "AcctXML"
+        }
+    },
+    "id": "a6b5a6fd-d487-4265-9745-b0fc19837983",
+    "version": "5.2.0.0"
+}

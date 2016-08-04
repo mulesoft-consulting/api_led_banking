@@ -1,0 +1,10 @@
+%dw 1.0
+%output application/java
+---
+{
+	Email: "????",
+	HomePhone: "????",
+	Phone: "????",
+	Birthdate: |2003-10-01|,
+	MobilePhone: "????"
+}

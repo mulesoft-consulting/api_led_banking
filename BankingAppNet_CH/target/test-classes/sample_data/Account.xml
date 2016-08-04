@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:Account xmlns:ns0="http://CustomerAccounts/XSD/CustomerAccount.xsd">
+  <ns0:acct_cust_id>????</ns0:acct_cust_id>
+  <ns0:acct_number>????</ns0:acct_number>
+  <ns0:acct_type>????</ns0:acct_type>
+  <ns0:acct_balance>2</ns0:acct_balance>
+  <ns0:acct_interest_rate>2</ns0:acct_interest_rate>
+</ns0:Account>

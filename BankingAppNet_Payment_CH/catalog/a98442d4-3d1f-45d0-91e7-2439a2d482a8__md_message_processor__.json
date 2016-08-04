@@ -1,0 +1,22 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Payment_JSON"
+        },
+        "flowVariables": {
+            "PaymentReq": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "Payment_JSON"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "PaymentResponse_JSON"
+        }
+    },
+    "id": "a98442d4-3d1f-45d0-91e7-2439a2d482a8",
+    "version": "5.2.0.0"
+}

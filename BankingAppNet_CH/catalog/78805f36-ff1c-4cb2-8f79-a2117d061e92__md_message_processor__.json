@@ -1,0 +1,16 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "Acount_XML"
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "AccountPOJO"
+        }
+    },
+    "id": "78805f36-ff1c-4cb2-8f79-a2117d061e92",
+    "version": "5.2.0.0"
+}

@@ -1,0 +1,22 @@
+{
+    "inputMessageMetadata": {
+        "flowVariables": {
+            "SFDC_content": {
+                "connectorName": "#_custom_mule_metadata_type_#",
+                "typeId": "sfdc_contact_json"
+            },
+            "demographics_var": {
+                "connectorName": "Web_Service_Consumer",
+                "typeId": "RESP"
+            }
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "customer_json"
+        }
+    },
+    "id": "c2a2d5bc-2a86-49be-a794-03b294a90c0d",
+    "version": "5.2.0.0"
+}

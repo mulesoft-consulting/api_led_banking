@@ -1,0 +1,16 @@
+{
+    "inputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "Web_Service_Consumer",
+            "typeId": "RESP"
+        }
+    },
+    "outputMessageMetadata": {
+        "messagePayload": {
+            "connectorName": "#_custom_mule_metadata_type_#",
+            "typeId": "name_json"
+        }
+    },
+    "id": "eb5020e3-eab0-4412-8e6b-d18edd198c12",
+    "version": "5.2.0.0"
+}
