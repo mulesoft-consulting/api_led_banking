@@ -30,8 +30,8 @@ http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/
     <ws:consumer-config name="Web_Service_Consumer" wsdlLocation="WSDL/Cust_Demographics_WSDL.wsdl" service="CustomerDemographicsService" port="CustomerDemographicsPort" serviceAddress="http://localhost:8083/CustomerDemographicsService/soap" doc:name="Web Service Consumer"/>
     <ws:consumer-config name="Web_Service_Consumer_Demographics_all" wsdlLocation="WSDL/Cust_Demographics_WSDL.wsdl" service="CustomerDemographicsServiceAll" port="CustomerDemographicsPortAll" serviceAddress="http://localhost:8083/CustomerDemographicsService/soap/all" doc:name="Web Service Consumer"/>
     <ws:consumer-config name="Web_Service_Consumer1" wsdlLocation="WSDL/Cust_Accounts_WSDL.wsdl" service="CustomerAccountsService" port="CustomerAccountsPort" serviceAddress="http://localhost:8084/CustomerAcountsService/soap" doc:name="Web Service Consumer"/>
-    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8085" doc:name="HTTP Request Configuration"/>
-    <http:request-config name="HTTP_Request_Configuration_CustSingle" host="localhost" port="8081" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8085" doc:name="HTTP Request Configuration" protocol="HTTP"/>
+    <http:request-config name="HTTP_Request_Configuration_CustSingle" host="localhost" port="8081" doc:name="HTTP Request Configuration" protocol="HTTP"/>
     <spring:beans>
         <spring:bean id="CustomerDemographicsBean" name="CustomerDemographicsBean" class="com.coast.CustomerDemographicsRecord" scope="prototype"/>
         <spring:bean id="CustomCustomerAggregatorBean" name="CustomCustomerAggregatorBean" class="com.coast.CustomCustomerAggregator"/>
@@ -40,9 +40,9 @@ http://www.mulesoft.org/schema/mule/twitter http://www.mulesoft.org/schema/mule/
         <spring:bean id="CEMObjectStore" class="org.mule.util.store.SimpleMemoryObjectStore"/>
     </spring:beans>
     <objectstore:config name="MyObjectStore" objectStore-ref="CEMObjectStore" doc:name="ObjectStore"/>
-    <http:request-config name="HTTP_Request_Configuration_DB_Config" host="localhost" port="${db.config.port}" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration_DB_Config" host="localhost" port="${db.config.port}" doc:name="HTTP Request Configuration" protocol="HTTP"/>
     <ws:consumer-config name="Web_Service_Consumer_createDemographics" wsdlLocation="WSDL/Cust_Demographics_WSDL.wsdl" service="CustomerDemographicsServiceCreateCustomer" port="CustomerDemographicsPortCreateCustomer" serviceAddress="http://localhost:8083/CustomerDemographicsService/soap/create" doc:name="Web Service Consumer"/>
-    <http:request-config name="HTTP_Request_Configuration_Accounts" host="${account.api.url}" port="${http.port.account}" basePath="/api/account" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration_Accounts" host="${account.api.url}" port="${http.port.account}" basePath="/api/account" doc:name="HTTP Request Configuration" protocol="HTTP"/>
     
     <flow name="api-main">
         <http:listener config-ref="api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>

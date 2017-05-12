@@ -10,7 +10,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="12344" doc:name="HTTP Listener Configuration"/>
-    <sfdc:config name="Salesforce__Basic_Authentication" username="bruno.baloi999@rogers.com" password="Snuggy1234567" securityToken="pc2o00xWXWhxFsYWLhEcZhkD" doc:name="Salesforce: Basic Authentication"/>
+    <sfdc:config name="Salesforce__Basic_Authentication" username="${sfdc.user_name}" password="${sfdc.password}" securityToken="${sfdc.security_token}" doc:name="Salesforce: Basic Authentication"/>
      
     <flow name="sfdc_contactFlow">
         <logger message="getting SFDC contatc for : #[payload]" level="INFO" doc:name="Logger"/>

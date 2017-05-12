@@ -1,11 +1,11 @@
 ----------------------------------------------------------------
-Mon Jul 18 12:26:51 EDT 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0155-fed4-df2a-0000310c6210 
-on database directory /Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet_CH/CUSTOMER with class loader org.mule.module.launcher.MuleApplicationClassLoader[BankingAppNet_CH]@474c9131 
-Loaded from file:/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/.mule/apps/BankingAppNet_CH/lib/derby.jar
+Mon Sep 05 20:58:51 EDT 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-0156-fd01-3af5-0000117e0230 
+on database directory /Users/brunobaloi/AnypointStudio/workspace_6.1.0_new/BankingAppNet_CH/CUSTOMER with class loader org.mule.module.launcher.MuleApplicationClassLoader[BankingAppNet_CH]@2c1d57bc 
+Loaded from file:/Users/brunobaloi/AnypointStudio/workspace_6.1.0_new/.mule/apps/BankingAppNet_CH/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_77-b03
-user.dir=/Users/brunobaloi/AnypointStudio/workspace_6.0.1_new/BankingAppNet_CH
+user.dir=/Users/brunobaloi/AnypointStudio/workspace_6.1.0_new/BankingAppNet_CH
 os.name=Mac OS X
 os.arch=x86_64
 os.version=10.10.5

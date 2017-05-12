@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/objectstore http://www.mulesoft.org/schema/mule/objectstore/current/mule-objectstore.xsd">
     <db:mysql-config name="MySQL_Configuration" host="localhost" port="3306" user="root" database="b2_test_db" doc:name="MySQL Configuration"/>
-    <http:request-config name="HTTP_Request_Configuration_AccountsAPI" host="${account.api.url}" port="${http.account.port}" basePath="/api" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration_AccountsAPI" host="${account.api.url}" port="${http.account.port}" basePath="/api" doc:name="HTTP Request Configuration" protocol="HTTP"/>
     <flow name="issuing_BankFlow">
         <byte-array-to-string-transformer doc:name="Byte Array to String"/>
         <tracking:custom-event event-name="IssuingBankPayment" doc:name="Custom Business Event">

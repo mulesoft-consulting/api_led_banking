@@ -13,8 +13,8 @@
 	<classpathentry kind="con" path="MULE_LIB/APIkit/org.mule.tooling.apikit.3.7.0"/>
 	<classpathentry kind="con" path="MULE_LIB/ObjectStore/org.mule.tooling.ui.contribution.objectstore.3.6.0"/>
 	<classpathentry kind="con" path="MULE_LIB/Anypoint MQ/org.mule.tooling.messaging.contribution"/>
-	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1/BankingAppNet_Payment/src/main/resources/lib/derby.jar"/>
-	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.0.1/BankingAppNet_Payment/src/main/resources/lib/mysql-connector-java-5.1.15.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.1.0_new/BankingAppNet_Payment_CH/src/main/resources/lib/derby.jar"/>
+	<classpathentry kind="lib" path="/Users/brunobaloi/AnypointStudio/workspace_6.1.0_new/BankingAppNet_Payment_CH/src/main/resources/lib/mysql-connector-java-5.1.15.jar"/>
 	<classpathentry kind="con" path="MULE_LIB/Twilio/org.mule.tooling.ui.contribution.twilio"/>
 	<classpathentry kind="con" path="MULE_LIB/Twitter/org.mule.tooling.ui.contribution.twitter.3.6.0"/>
 	<classpathentry kind="output" path="target/classes"/>

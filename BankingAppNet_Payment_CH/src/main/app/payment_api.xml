@@ -15,7 +15,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
     </spring:beans>
     <objectstore:config name="MyObjectStore" objectStore-ref="CEMObjectStore" doc:name="ObjectStore"/>
     
-    <http:request-config name="HTTP_Request_Configuration_PaymentProcessor" host="localhost" port="8098" doc:name="HTTP Request Configuration"/>
+    <http:request-config name="HTTP_Request_Configuration_PaymentProcessor" host="localhost" port="8098" doc:name="HTTP Request Configuration" protocol="HTTP"/>
     <vm:connector name="VM" validateConnections="true" doc:name="VM"/>
     <flow name="payment_api-main">
         <http:listener config-ref="payment_api-httpListenerConfig" path="/api/*" doc:name="HTTP"/>
